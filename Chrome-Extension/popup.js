@@ -7,8 +7,8 @@ chrome.tabs.query({'active': true}, function (tabs) {
         url_queue.push(url);
         
     chrome.tabs.sendRequest(tabs[0].id, {method:'getHTML'}, function(response){
-        alert('yes');
-        console.log('yes');
+        console.log(response);
+        console.log(response.data);
         url_queue.splice(url_queue.indexOf(url), 1);
     });
     }
