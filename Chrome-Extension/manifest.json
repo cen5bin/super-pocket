@@ -17,5 +17,10 @@
         "run_at" : "document_end"
     }],
     
-    "permissions" : ["tabs", "activeTab", "<all_urls>"]
+    "permissions" : ["tabs", "activeTab", "<all_urls>"],
+
+    //只有加上了下面这段，才可以用iframe来引用插件中的html
+    "web_accessible_resources": [
+        "panel.html"
+    ]
 }

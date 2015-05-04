@@ -13,3 +13,23 @@ chrome.tabs.query({'active': true}, function (tabs) {
     });
     }
 });
+
+document.onkeydown = function(event) {
+    if (event.keyCode == 27) {
+        chrome.tabs.query({'active': true}, function (tabs) {
+            var url = tabs[0].url;
+            chrome.tabs.sendRequest(tabs[0].id, {method:'exit'}, function(response){
+
+            });
+        });
+    }
+};
+
+addEventListener("unload", function(event){
+    chrome.tabs.query({'active': true}, function (tabs) {
+        var url = tabs[0].url;
+        chrome.tabs.sendRequest(tabs[0].id, {method:'exit'}, function(response){
+
+        });
+    });
+});
