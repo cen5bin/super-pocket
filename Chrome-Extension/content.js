@@ -21,7 +21,7 @@ var clip_content = function() {
 
 //显示剪藏功能的控制面板
 var show_super_pocket_panel = function() {
-    $('html').append('<iframe id="super-pocket-panel" src="'+ chrome.extension.getURL('panel.html') +'"></iframe>')
+    $('html').append('<iframe id="super-pocket-panel" scrolling="no" src="'+ chrome.extension.getURL('panel.html') +'"></iframe>')
 }
 
 var is_clipping = false; //当前页面是否处于剪藏状态

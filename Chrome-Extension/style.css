@@ -1,11 +1,11 @@
 #super-pocket-bg {
     border-color: rgba(255, 255, 255, 0.74902);
     border-style: solid;
-    /*background-color: rgba(255, 255, 255, 0.74902);*/
     left: 0px;
     top: 0px;
     position: absolute;
     z-index: 2147483646;
+    /*overflow: hidden;*/
 }
 
 #super-pocket-bg #super-pocket-container {
@@ -16,6 +16,7 @@
 }
 
 
+/*剪藏工具面板的那个iframe*/
 #super-pocket-panel {
     position: fixed;
     right: 20px;
@@ -23,11 +24,41 @@
     z-index: 2147483647;
     width: 300px;
     height: 500px;
-    border: 0;
+
+    /*border: 1px solid black;*/
 }
 
-#super-pocket-panel-container {
+/*剪藏工具面板的轮廓*/
+#super-pocket-panel-main {
     width: 100%;
+    background-color: #333333;
+    border: 2px solid #cccccc;
+}
+
+/*剪藏工具面板中的最主要的那个div*/
+#super-pocket-panel-container {
+    margin: auto;
+    width: 80%;
     height: 100%;
-    background-color: red;
+    background-color: #333333;
+    /*padding-top: 10px;*/
+}
+
+#super-pocket-panel-container #content-title {
+    /*margin: auto;*/
+    /*margin-top: 120px;*/
+    width: 100%;
+    /*height: 60px;*/
+    font-size: 15px;
+    font-family: CaeciliaItalic, Times, serif;
+    text-shadow: 0px 1px 2px;
+    line-height: 21px;
+    color: white;
+    border: none;
+    outline: none;
+    resize: none;
+    background-color: transparent;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    /*background-color: #333333;*/
 }
