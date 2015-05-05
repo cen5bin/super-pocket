@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="error">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%highlight{%d{default} %logger{36} [%t] %-5level %L -%msg%n}"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Root level="info">
+			<AppenderRef ref="Console"/>
+		</Root>
+	</Loggers>
+</configuration>
