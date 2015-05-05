@@ -1,7 +1,5 @@
-var keyDown = null;
-
-//获取网页正文
-var get_content = function() {
+//获取网页正文，剪藏功能
+var clip_content = function() {
     //计算坐标
     var page_h = $(document).height();
     var page_w = $(document).width();
@@ -21,42 +19,47 @@ var get_content = function() {
     $('#super-pocket-bg').append('<div id="super-pocket-container"></div>');
 };
 
+//显示剪藏功能的控制面板
 var show_super_pocket_panel = function() {
     $('html').append('<iframe id="super-pocket-panel" src="'+ chrome.extension.getURL('panel.html') +'"></iframe>')
 }
 
+var is_clipping = false; //当前页面是否处于剪藏状态
 //退出剪藏功能，恢复原始页面
 var recover_page = function() {
     $('#super-pocket-bg').remove();
     $('#super-pocket-panel').remove();
+    document.onkeydown = key_down;
+    is_clipping = false;
 };
 
-//监听键盘事件
+var key_down = null;  //保存原来页面中的按键事件
+//监听键盘事件，按Esc要退出剪藏功能
 var add_keyboard_listener = function() {
+    if (key_down == null) key_down = document.onkeydown;
     document.onkeydown = function (event) {
         console.log(event.keyCode);
         //按Esc，应该恢复原始页面
         if (event.keyCode == 27) {
             recover_page();
-            document.onkeydown = keyDown;
         }
     };
 };
 
-
-chrome.extension.onRequest.addListener(
-        function(request, sender, sendRensponse){
-            if (request.method == 'getHTML') {
-                if (keyDown == null) keyDown = document.onkeydown;
-                //add_keyboard_listener();
-                get_content();
+//消息监听
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        console.log(request);
+        //从event.js发来了clip消息，开始剪藏
+        if (request.method == 'clip') {
+            if (!is_clipping) {
+                add_keyboard_listener();
+                clip_content();
                 show_super_pocket_panel();
-               // var y = $('#article_details').offset().left;
-                sendRensponse({data:'x:'+x, method : 'getHTML'});
-                //$('#article_details').css('border', '1px solid #333333');
+                sendResponse('Good Job!');
+                is_clipping = true;
             }
-            else if (request.method == 'exit') {
-                recover_page();
-            }
-        });
-
+            else recover_page();
+        }
+    }
+);

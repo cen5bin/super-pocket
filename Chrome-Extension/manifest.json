@@ -6,7 +6,7 @@
 
     "browser_action" : {
         "default_icon" : "icon.png",
-        "default_popup" : "popup.html",
+//        "default_popup" : "popup.html",
         "default_title" : "保存到super pocket"
     },
 
@@ -16,7 +16,12 @@
         "matches" : ["http://*/*", "https://*/*"],
         "run_at" : "document_end"
     }],
-    
+
+    "background" : {
+        "scripts" : ["event.js"],
+        "persistent" : false    //如果不加这个属性，那么就是一个普通的background page
+    },
+
     "permissions" : ["tabs", "activeTab", "<all_urls>"],
 
     //只有加上了下面这段，才可以用iframe来引用插件中的html
