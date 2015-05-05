@@ -9,13 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Servlet implementation class SignIn
  */
 @WebServlet("/SignIn")
 public class SignIn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    private static final Logger logger = LogManager.getLogger();   
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -31,6 +34,8 @@ public class SignIn extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		out.print("asd");
+		logger.info("zz");
+		logger.error("xx");
 	}
 
 	/**

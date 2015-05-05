@@ -2,7 +2,11 @@
 <configuration status="error">
 	<Appenders>
 		<Console name="Console" target="SYSTEM_OUT">
-			<PatternLayout pattern="%highlight{%d{default} %logger{36} [%t] %-5level %L -%msg%n}"/>
+			<PatternLayout>
+				<pattern>
+					%highlight{%-5level %d{yyyy-MM-dd HH:mm:ss} %l: %m%n}
+				</pattern>
+			</PatternLayout>
 		</Console>
 	</Appenders>
 	<Loggers>
