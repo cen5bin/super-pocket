@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.superpocket.kit.DataKit;
 
 /**
  * Servlet implementation class SignIn
@@ -43,6 +47,24 @@ public class SignIn extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		logger.info("yes");
+		try {
+			String data = DataKit.getJsonData(request.getReader());
+			logger.debug(data);
+			JSONObject json1 = new JSONObject(data);
+			logger.debug(json1.get("email"));
+			response.setContentType("application/json; charset=utf-8");
+			PrintWriter out = response.getWriter();
+			JSONObject json = new JSONObject();
+			json.put("asd", "asd");
+			json.put("zz", "zz");
+			out.print(json.toString());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 	}
 
 }
