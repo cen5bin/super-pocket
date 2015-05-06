@@ -12,25 +12,32 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
 });
 
 
+//获取email和password
+function get_user_data() {
+    var ret = {};
+    ret['email'] = $('#email').val();
+    ret['password'] = $('#password').val();
+    return ret;
+}
+
+
+//登录功能
+function sign_in() {
+    chrome.extension.getBackgroundPage().send_request_post('SignIn', get_user_data(), function(data){
+        console.log(data.zz);
+    });
+}
+
+//注册功能
+function sign_up() {
+    chrome.extension.getBackgroundPage().send_request_post('SignUp', get_user_data(), function(data){
+        console.log(data);
+    });
+}
+
 
 $(document).ready(function(){
-    $('#signin_button').click(function(){
-        console.log('sign in');
-        var tmp = {
-            email : 'asd@asd.com',
-            password : 'aaaaaa'
-        };
-
-        $.ajax({
-            type : 'post',
-            contentType : 'application/json',
-            url : 'http://10.211.55.8:8080/Server/SignIn',
-            data : JSON.stringify(tmp),
-            dataType : 'json',
-            success : function(data) {
-                console.log('zz');
-                console.log(data.zz);
-            }
-        });
-    });
+    $('#signin_button').click(sign_in);
+    $('#signup_button').click(sign_up);
 });
+

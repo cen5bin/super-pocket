@@ -18,11 +18,11 @@
     }],
 
     "background" : {
-        "scripts" : ["event.js"],
+        "scripts" : ["jquery.js", "json2.js", "event.js"],
         "persistent" : false    //如果不加这个属性，那么就是一个普通的background page
     },
 
-    "permissions" : ["tabs", "activeTab", "<all_urls>"],
+    "permissions" : ["tabs", "activeTab", "<all_urls>", "background"],  //background表示可以用chrome.extension.getBackgroundPage()
 
     //只有加上了下面这段，才可以用iframe来引用插件中的html
     "web_accessible_resources": [
