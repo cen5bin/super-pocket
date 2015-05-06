@@ -19,8 +19,8 @@
 /*剪藏工具面板的那个iframe*/
 #super-pocket-panel {
     position: fixed;
-    right: 20px;
-    top: 20px;
+    right: 10px;
+    top: 10px;
     z-index: 2147483647;
     width: 300px;
     height: 500px;
@@ -70,4 +70,36 @@
 #super-pocket-panel-container p {
     color: rgba(255,255,255,0.5);
     font-weight: 100;
+}
+
+#super-pocket-sign-panel {
+    width: 300px;
+    height: 400px;
+    background-color: black;
+    text-align: center;
+    padding-top: 10px;
+    /*margin: -5px -5px -25px -5px;*/
+    border-radius: 4px;
+    /*padding: 10px 20px;*/
+}
+
+#super-pocket-sign-panel #logo {
+    margin: auto;
+    width: 80%;
+    height: 50px;
+    background-color: red;
+}
+
+#super-pocket-sign-panel input {
+    margin-top: 10px;
+    width: 80%;
+    height: 36px;
+    font-size: 12px;
+    border-radius: 4px;
+    outline: none;
+    padding-left: 10px;
+    border: 1px solid black;
+    box-sizing: border-box;         /* For IE and modern versions of Chrome */
+    -moz-box-sizing: border-box;    /* For Firefox                          */
+    -webkit-box-sizing: border-box; /* For Safari                           */
 }
