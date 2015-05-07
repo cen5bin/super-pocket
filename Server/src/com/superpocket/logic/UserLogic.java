@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.superpocket.dao.DBConnector;
+import com.superpocket.kit.SecureKit;
 
 public class UserLogic {
 	private static final Logger logger = LogManager.getLogger();
@@ -17,10 +18,10 @@ public class UserLogic {
 	 * @return
 	 */
 	public static boolean SignIn(String email, String password) {
-		String sql = String.format("select password from user where email='%s' limit 1", email);
+		String sql = String.format("select password, salt from user where email='%s' limit 1", email);
 		ResultSet rs = DBConnector.query(sql);
 		try {
-			if (!rs.next() || !rs.getString(1).equals(password)) return false;
+			if (!rs.next() || !SecureKit.encryptPassword(password, rs.getString(2)).equals(rs.getString(1))) return false;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,7 +44,9 @@ public class UserLogic {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		sql = String.format("insert into user(email, password) values('%s', '%s')", email, password);
+		String salt = SecureKit.generateSalt(32);
+		String encryptedPass = SecureKit.encryptPassword(password, salt);
+		sql = String.format("insert into user(email, password, salt) values('%s', '%s', '%s')", email, encryptedPass, salt);
 		return DBConnector.update(sql);
 	}
 	

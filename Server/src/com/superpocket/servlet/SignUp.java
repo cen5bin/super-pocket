@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.superpocket.kit.DataKit;
+import com.superpocket.logic.UserLogic;
 
 /**
  * Servlet implementation class SignUp
@@ -48,6 +49,10 @@ public class SignUp extends HttpServlet {
 		String data = DataKit.getJsonData(request.getReader());
 		try {
 			JSONObject json = new JSONObject(data);
+			String email = json.getString("email");
+			String password = json.getString("password");
+			boolean ret = UserLogic.SignUp(email, password);
+			if (ret) logger.debug("sign up success");
 			logger.debug(json);
 			response.setContentType("application/json; charset=utf-8");
 			PrintWriter out = response.getWriter();

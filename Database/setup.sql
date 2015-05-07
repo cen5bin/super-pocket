@@ -5,8 +5,9 @@ use super_pocket;
 create table if not exists user (
     uid int primary key not null auto_increment,
     email varchar(30) not null,
-    password varchar(20) not null
+    password varchar(45) not null,
+    salt varchar(45) not null
 );
 
 /*插入几个测试用户*/
-insert into user(email, password) values('test@gmail.com', '123456'), ('love@gmail.com', 'love77');
+/*insert into user(email, password, salt) values('test@gmail.com', '123456', '111'), ('love@gmail.com', 'love77', '222');*/
