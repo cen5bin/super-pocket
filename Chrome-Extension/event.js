@@ -7,13 +7,15 @@
  * @param servlet 服务端servlet名称
  * @param data  数据，json格式
  * @param callback 回调函数，有一个参数data
+ * @param secure 是否需要加密
  */
-function send_request_post(servlet, data, callback) {
+function send_request_post(servlet, data, secure, callback) {
     console.log('zz');
+    var url_prefix = (secure ? 'https://10.211.55.8:8443' : 'http://10.211.55.8:8080') + '/Server/';
     $.ajax({
         type : 'post',
         contentType : 'application/json',
-        url : 'http://10.211.55.8:8080/Server/' + servlet,
+        url : url_prefix + servlet,
         data : JSON.stringify(data),
         dataType : 'json',
         success : callback

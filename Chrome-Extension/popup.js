@@ -58,9 +58,9 @@ function judge_user_data_valid() {
 function sign_in() {
     if (!judge_user_data_valid()) return;
     chrome.runtime.getBackgroundPage(function(background){
-         background.send_request_post('SignIn', get_user_data(), function(data){
-             console.log(data.zz);
-         });
+        background.send_request_post('SignIn', get_user_data(), function(data){
+            console.log(data.zz);
+        }, true);
     });
 }
 
