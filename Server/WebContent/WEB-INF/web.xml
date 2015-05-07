@@ -9,4 +9,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
+  <security-constraint>
+  	<web-resource-collection>
+  		<web-resource-name>AuthServer</web-resource-name>
+  		<url-pattern>/SignIn</url-pattern>
+  	</web-resource-collection>
+  	<user-data-constraint>
+  		<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+  	</user-data-constraint>
+  </security-constraint>
 </web-app>
