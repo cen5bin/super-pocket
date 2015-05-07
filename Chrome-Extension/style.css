@@ -91,8 +91,8 @@
 }
 
 #super-pocket-sign-panel input {
-    margin-top: 10px;
-    width: 80%;
+    /*margin-top: 10px;*/
+    width: 100%;
     height: 36px;
     font-size: 12px;
     border-radius: 4px;
@@ -102,4 +102,16 @@
     box-sizing: border-box;         /* For IE and modern versions of Chrome */
     -moz-box-sizing: border-box;    /* For Firefox                          */
     -webkit-box-sizing: border-box; /* For Safari                           */
+}
+
+#super-pocket-sign-panel .input-container {
+    height: 54px;
+    width: 80%;
+    margin: auto;
+    text-align: left;
+}
+
+#super-pocket-sign-panel .input-container p {
+    color: white;
+    margin-top: 2px;
 }
