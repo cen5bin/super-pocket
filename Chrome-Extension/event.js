@@ -11,6 +11,7 @@
  */
 function send_request_post(servlet, data, callback, secure) {
     var url_prefix = (secure ? 'https://10.211.55.8:8443' : 'http://10.211.55.8:8080') + '/Server/';
+    console.log('send request to ' + url_prefix + servlet);
     $.ajax({
         type : 'post',
         contentType : 'application/json; charset=utf-8',

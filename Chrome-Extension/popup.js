@@ -5,28 +5,12 @@
 //利用cookie自动登录
 function auto_sign_in() {
     chrome.runtime.getBackgroundPage(function(background){
-        background.send_request_post('SignIn', '{}', function(data){
+        background.send_request_post('Secure/SignIn', '{}', function(data){
             console.log(data);
             if (data.success == 'yes') {
                 background.clip_content();
             }
         }, true);
-    });
-}
-
-chrome.cookies.get({url:'https://10.211.55.8:8443/Server/', name:"token"}, function(cookie){
-    if (cookie) {
-        window.close();
-        auto_sign_in();
-    }
-});
-
-//获取网页正文
-function clip_content() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-        chrome.tabs.sendMessage(tabs[0].id, {method: 'clip'}, function(response){
-            console.log(response);
-        });
     });
 }
 
@@ -73,15 +57,22 @@ function judge_user_data_valid() {
     return true;
 }
 
+function sign_in_failed() {
+    clear_error_tip();
+    $($('.input-container')[0]).append('<p>邮箱或者密码错误</p>');
+}
+
 //登录功能
 function sign_in() {
-    if (judge_user_data_valid()) return;
+    if (!judge_user_data_valid()) return;
     console.log('begin to sign in');
     chrome.runtime.getBackgroundPage(function(background){
-        background.send_request_post('SignIn', get_user_data(), function(data){
-            chrome.cookies.get({url:'https://10.211.55.8:8443/Server/', name:"email"}, function(cookie){
-                console.log(cookie.value);
-            });
+        background.send_request_post('Secure/SignIn', get_user_data(), function(data){
+            if (data.success == 'yes') {
+                window.close();
+                background.clip_content();
+            }
+            else sign_in_failed();
         }, true);
     });
 }
@@ -90,16 +81,38 @@ function sign_in() {
 //注册功能
 function sign_up() {
     if (!judge_user_data_valid()) return;
+    console.log('begin to sign up');
     chrome.runtime.getBackgroundPage(function(background){
-        background.send_request_post('SignUp', get_user_data(), function(data){
+        background.send_request_post('Secure/SignUp', get_user_data(), function(data){
             console.log(data);
         });
     });
 }
 
 
+var cookie_url = 'https://10.211.55.8:8443/Server/';
+
+//注销功能
+function sign_out() {
+    console.log('sign out');
+    chrome.cookies.remove({url:cookie_url, name:'email'});
+    chrome.cookies.remove({url:cookie_url, name:'token'});
+}
+
 $(document).ready(function(){
+    console.log('document ready');
+    sign_out();
     $('#signin_button').click(sign_in);
     $('#signup_button').click(sign_up);
+
+    //return;
+    ////如果cookie已经存在，则自动登录
+    //chrome.cookies.get({url:'https://10.211.55.8:8443/Server/', name:"token"}, function(cookie){
+    //    if (cookie) {
+    //        window.close();
+    //        auto_sign_in();
+    //    }
+    //});
+
 });
 
