@@ -10,17 +10,20 @@ import org.apache.logging.log4j.Logger;
 
 public class SecureKit {
 	private static final Logger logger = LogManager.getLogger();
-	private static final String ENCRYPT_ALGO = "SHA-256";
+	private static final String PASSWORD_ENCRYPT_ALGO = "SHA-256"; //服务端对密码进行加密的算法
+	private static final String COOKIE_ENCRYPT_ALGO = "MD5"; //cookie加密
+	private static final String COOKIE_ENCRYPT_KEY = "UdbhIhf，UgGF？%i2N";
 	
 	/**
 	 * 将bytes数组用ENCRYPT_ALGO加密
-	 * @param bytes
+	 * @param bytes 待加密的字符数组
+	 * @param algo  加密算法
 	 * @return 加密后的byte数组
 	 */
-	private static byte[] encrypt(byte[] bytes) {
+	private static byte[] encrypt(byte[] bytes, String algo) {
 		MessageDigest md;
 		try {
-			md = MessageDigest.getInstance(ENCRYPT_ALGO);
+			md = MessageDigest.getInstance(algo);
 			md.update(bytes);
 			return md.digest();
 		} catch (NoSuchAlgorithmException e) {
@@ -38,11 +41,11 @@ public class SecureKit {
 	 */
 	public static String encryptPassword(String password, String salt) {
 		byte[] saltBytes = Base64.getDecoder().decode(salt);
-		byte[] passBytes = encrypt(password.getBytes());
+		byte[] passBytes = encrypt(password.getBytes(), PASSWORD_ENCRYPT_ALGO);
 		byte[] passWithSalt = new byte[saltBytes.length + passBytes.length];
 		for (int i = 0; i < passBytes.length; ++i) passWithSalt[i] = passBytes[i];
 		for (int i = 0; i < saltBytes.length; ++i) passWithSalt[i+passBytes.length] = saltBytes[i];
-		byte[] encryptedPass = encrypt(passWithSalt);
+		byte[] encryptedPass = encrypt(passWithSalt, PASSWORD_ENCRYPT_ALGO);
 		return Base64.getEncoder().encodeToString(encryptedPass);
 	}
 	
@@ -55,6 +58,16 @@ public class SecureKit {
 		SecureRandom random = new SecureRandom();
 		byte[] bytes = new byte[len];
 		random.nextBytes(bytes);
+		return Base64.getEncoder().encodeToString(bytes);
+	}
+	
+	/**
+	 * 加密用户email，写到cookie中
+	 * @param email
+	 * @return
+	 */
+	public static String encryptCookie(String email) {
+		byte[] bytes = encrypt((email+COOKIE_ENCRYPT_KEY).getBytes(), COOKIE_ENCRYPT_ALGO);
 		return Base64.getEncoder().encodeToString(bytes);
 	}
 	
