@@ -74,8 +74,9 @@
 
 #super-pocket-sign-panel {
     width: 300px;
-    height: 400px;
-    background-color: black;
+    height: 300px;
+    /*background-color: #04477c;*/
+    background-color: #143325;
     text-align: center;
     padding-top: 10px;
     /*margin: -5px -5px -25px -5px;*/
@@ -86,8 +87,14 @@
 #super-pocket-sign-panel #logo {
     margin: auto;
     width: 80%;
-    height: 50px;
-    background-color: red;
+    height: 65px;
+    text-align: left;
+    /*background-color: red;*/
+}
+
+#super-pocket-sign-panel #logo img {
+    width: 180px;
+    height: 49px;
 }
 
 #super-pocket-sign-panel input {
@@ -95,10 +102,12 @@
     width: 100%;
     height: 36px;
     font-size: 12px;
+    /*background-color: rgb(249, 255, 196);*/
+    /*background-color: #8ec2f5;*/
     border-radius: 4px;
     outline: none;
     padding-left: 10px;
-    border: 1px solid black;
+    border: 1px solid transparent;
     box-sizing: border-box;         /* For IE and modern versions of Chrome */
     -moz-box-sizing: border-box;    /* For Firefox                          */
     -webkit-box-sizing: border-box; /* For Safari                           */
@@ -116,3 +125,21 @@
     margin-top: 2px;
     font-size: 6px;
 }
+
+#super-pocket-sign-panel button {
+    color: white;
+    border: 0;
+    border-radius: 4px;
+    width: 80%;
+    height: 36px;
+    font-size: 16px;
+}
+
+#signin-button {
+    background-color: rgb(38, 165, 99);
+}
+
+#signup-button {
+    background-color: rgb(222, 231, 201);
+}
+

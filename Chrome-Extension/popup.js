@@ -77,7 +77,6 @@ function sign_in() {
     });
 }
 
-
 //注册功能
 function sign_up() {
     if (!judge_user_data_valid()) return;
@@ -85,12 +84,12 @@ function sign_up() {
     chrome.runtime.getBackgroundPage(function(background){
         background.send_request_post('Secure/SignUp', get_user_data(), function(data){
             console.log(data);
-        });
+        }, true);
     });
 }
 
-
-var cookie_url = 'https://10.211.55.8:8443/Server/';
+//服务端登录和注册的url前缀，需要根据实际情况配置
+var cookie_url = 'https://10.211.55.8:8443/Server/Secure/';
 
 //注销功能
 function sign_out() {
@@ -102,17 +101,16 @@ function sign_out() {
 $(document).ready(function(){
     console.log('document ready');
     sign_out();
-    $('#signin_button').click(sign_in);
-    $('#signup_button').click(sign_up);
+    $('#signin-button').click(sign_in);
+    $('#signup-button').click(sign_up);
 
-    //return;
-    ////如果cookie已经存在，则自动登录
-    //chrome.cookies.get({url:'https://10.211.55.8:8443/Server/', name:"token"}, function(cookie){
-    //    if (cookie) {
-    //        window.close();
-    //        auto_sign_in();
-    //    }
-    //});
+    //如果cookie已经存在，则自动登录
+    chrome.cookies.get({url:cookie_url, name:"token"}, function(cookie){
+        if (cookie) {
+            window.close();
+            auto_sign_in();
+        }
+    });
 
 });
 
