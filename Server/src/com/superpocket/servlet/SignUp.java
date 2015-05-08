@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,7 @@ import com.superpocket.logic.UserLogic;
 /**
  * Servlet implementation class SignUp
  */
-@WebServlet("/SignUp")
+@WebServlet("/Secure/SignUp")
 public class SignUp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static final Logger logger = LogManager.getLogger();   
@@ -52,7 +53,13 @@ public class SignUp extends HttpServlet {
 			String email = json.getString("email");
 			String password = json.getString("password");
 			boolean ret = UserLogic.SignUp(email, password);
-			if (ret) logger.debug("sign up success");
+			if (ret) {
+				logger.debug("sign up success");
+				Cookie emailCookie = new Cookie("email", email);
+				Cookie tokenCookie = new Cookie("token", UserLogic.generateUserToken(email));
+				response.addCookie(emailCookie);
+				response.addCookie(tokenCookie);
+			}
 			logger.debug(json);
 			response.setContentType("application/json; charset=utf-8");
 			PrintWriter out = response.getWriter();

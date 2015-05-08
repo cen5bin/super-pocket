@@ -21,7 +21,7 @@ import com.superpocket.logic.UserLogic;
 /**
  * Servlet implementation class SignIn
  */
-@WebServlet("/SignIn")
+@WebServlet("/Secure/SignIn")
 public class SignIn extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static final Logger logger = LogManager.getLogger();   
@@ -64,6 +64,8 @@ public class SignIn extends HttpServlet {
 					logger.debug("sign in success");
 					Cookie emailCookie = new Cookie("email", email);
 					Cookie tokenCookie = new Cookie("token", UserLogic.generateUserToken(email));
+					emailCookie.setMaxAge(Integer.MAX_VALUE);
+					tokenCookie.setMaxAge(Integer.MAX_VALUE);
 					response.addCookie(emailCookie);
 					response.addCookie(tokenCookie);
 					retObj.put("success", "yes");

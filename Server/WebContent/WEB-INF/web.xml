@@ -13,7 +13,7 @@
   <security-constraint>
   	<web-resource-collection>
   		<web-resource-name>AuthServer</web-resource-name>
-  		<url-pattern>/SignIn</url-pattern>
+  		<url-pattern>/Secure/*</url-pattern>
   	</web-resource-collection>
   	<user-data-constraint>
   		<transport-guarantee>CONFIDENTIAL</transport-guarantee>

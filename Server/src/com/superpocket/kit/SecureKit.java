@@ -62,7 +62,7 @@ public class SecureKit {
 	}
 	
 	/**
-	 * 加密用户email，写到cookie中
+	 * 加密用户email，返回加密后的token
 	 * @param email
 	 * @return
 	 */

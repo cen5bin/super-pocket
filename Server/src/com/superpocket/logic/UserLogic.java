@@ -31,6 +31,11 @@ public class UserLogic {
 		return true;
 	}
 	
+	/**
+	 * 判断用户身份，返回的是用户email，如果尚未登录则是null
+	 * @param cookies
+	 * @return
+	 */
 	public static String judgeUserStatus(Cookie[] cookies) {
 		if (cookies == null) return null;
 		String account = "";
