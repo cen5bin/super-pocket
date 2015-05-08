@@ -1,16 +1,34 @@
 /**
  * Created by wubincen on 15/5/5.
  */
-//window.close();
 
-//chrome.runtime.getBackgroundPage().extension_button_clicked();
-
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-    chrome.tabs.sendMessage(tabs[0].id, {method: 'clip'}, function(response){
-        console.log(response);
+//利用cookie自动登录
+function auto_sign_in() {
+    chrome.runtime.getBackgroundPage(function(background){
+        background.send_request_post('SignIn', '{}', function(data){
+            console.log(data);
+            if (data.success == 'yes') {
+                background.clip_content();
+            }
+        }, true);
     });
+}
+
+chrome.cookies.get({url:'https://10.211.55.8:8443/Server/', name:"token"}, function(cookie){
+    if (cookie) {
+        window.close();
+        auto_sign_in();
+    }
 });
 
+//获取网页正文
+function clip_content() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+        chrome.tabs.sendMessage(tabs[0].id, {method: 'clip'}, function(response){
+            console.log(response);
+        });
+    });
+}
 
 //获取email和password
 function get_user_data() {
@@ -31,6 +49,7 @@ function is_email(str) {
         return true;
 }
 
+//清除错误提示
 function clear_error_tip() {
     $('.input-container p').remove();
 }
@@ -56,13 +75,17 @@ function judge_user_data_valid() {
 
 //登录功能
 function sign_in() {
-    if (!judge_user_data_valid()) return;
+    if (judge_user_data_valid()) return;
+    console.log('begin to sign in');
     chrome.runtime.getBackgroundPage(function(background){
         background.send_request_post('SignIn', get_user_data(), function(data){
-            console.log(data.zz);
+            chrome.cookies.get({url:'https://10.211.55.8:8443/Server/', name:"email"}, function(cookie){
+                console.log(cookie.value);
+            });
         }, true);
     });
 }
+
 
 //注册功能
 function sign_up() {
