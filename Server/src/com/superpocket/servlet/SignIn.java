@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.superpocket.kit.DataKit;
+import com.superpocket.logic.NetLogic;
 import com.superpocket.logic.UserLogic;
 
 /**
@@ -49,7 +50,7 @@ public class SignIn extends HttpServlet {
 		// TODO Auto-generated method stub
 		try {
 			JSONObject retObj = new JSONObject();
-			if (UserLogic.judgeUserStatus(request.getCookies()) != null) {
+			if (UserLogic.judgeUserStatus(request.getCookies()) != 0) {
 				logger.debug("auto sign in success");
 				retObj.put("success", "yes");
 			}
@@ -59,15 +60,12 @@ public class SignIn extends HttpServlet {
 				JSONObject json = new JSONObject(data);
 				String email = json.getString("email");
 				String password = json.getString("password");
-				boolean ret = UserLogic.SignIn(email, password);
-				if (ret) {
+				int uid = UserLogic.SignIn(email, password);
+				if (uid > 0) {
 					logger.debug("sign in success");
-					Cookie emailCookie = new Cookie("email", email);
-					Cookie tokenCookie = new Cookie("token", UserLogic.generateUserToken(email));
-					emailCookie.setMaxAge(Integer.MAX_VALUE);
-					tokenCookie.setMaxAge(Integer.MAX_VALUE);
-					response.addCookie(emailCookie);
-					response.addCookie(tokenCookie);
+					NetLogic.addCookie(response, new Cookie("email", email), false);
+					NetLogic.addCookie(response, new Cookie("token", UserLogic.generateUserToken(email)), true);
+					NetLogic.addCookie(response, new Cookie("uid", uid + ""), true);
 					retObj.put("success", "yes");
 				}
 				else {
