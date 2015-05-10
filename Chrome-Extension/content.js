@@ -10,7 +10,7 @@ function trim(str){
     return str;
 }
 
-
+//抽取文章标题，目前直接返回网页title
 function extract_title(post_div) {
     return document.title;
     console.log($($('#'+post_div+' h1')[0]).html().replace(/<[^>]+>/g,''));

@@ -28,46 +28,7 @@
     /*border: 1px solid black;*/
 }
 
-/*剪藏工具面板的轮廓*/
-#super-pocket-panel-main {
-    width: 100%;
-    background-color: #143325;
-    border: 2px solid #cccccc;
-    /*overflow: hidden;*/
-}
 
-/*剪藏工具面板中的最主要的那个div*/
-#super-pocket-panel-container {
-    margin: auto;
-    width: 80%;
-    height: 100%;
-    background-color: #143325;
-    color: white;
-    /*padding-top: 10px;*/
-}
-
-#super-pocket-panel-title {
-    margin-top: 10px;
-    width: 100%;
-    /*height: 60px;*/
-    font-size: 15px;
-    /*font-family: CaeciliaItalic, Times, serif;*/
-    /*text-shadow: 0px 1px 1px;*/
-    line-height: 21px;
-    color: white;
-    border: none;
-    outline: none;
-    resize: none;
-    background-color: transparent;
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-
-
-#super-pocket-panel-container p {
-    color: rgba(255,255,255,0.5);
-    font-weight: 100;
-}
 
 #super-pocket-sign-panel {
     width: 300px;
@@ -123,7 +84,7 @@
     font-size: 6px;
 }
 
-#super-pocket-sign-panel button {
+#super-pocket-sign-panel button, #super-pocket-panel-container button{
     color: white;
     border: 0;
     border-radius: 4px;
@@ -132,7 +93,7 @@
     font-size: 16px;
 }
 
-#signin-button {
+#signin-button, button.dark {
     background-color: rgb(38, 165, 99);
 }
 
@@ -140,3 +101,87 @@
     background-color: rgb(222, 231, 201);
 }
 
+
+
+
+
+/*剪藏工具面板的轮廓*/
+#super-pocket-panel-main {
+    width: 100%;
+    background-color: #143325;
+    border: 2px solid #cccccc;
+    /*overflow: hidden;*/
+}
+
+/*剪藏工具面板中的最主要的那个div*/
+#super-pocket-panel-container {
+    margin: auto;
+    width: 80%;
+    height: 100%;
+    background-color: #143325;
+    color: white;
+    /*padding-top: 10px;*/
+}
+
+#super-pocket-panel-title {
+    margin-top: 10px;
+    width: 100%;
+    /*height: 60px;*/
+    font-size: 15px;
+    /*font-family: "Helvetica", "Arial", "Lucida Grande", sans-serif;*/
+    /*font-family: CaeciliaItalic, Times, serif;*/
+    /*text-shadow: 0px 1px 1px;*/
+    line-height: 21px;
+    color: #d4d4d4;
+    border: none;
+    outline: none;
+    resize: none;
+    background-color: transparent;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#super-pocket-panel-container {
+    font-family: "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;
+}
+
+#super-pocket-panel-container button {
+    width: 100%;
+}
+
+p.separate-line {
+    /*font-family: "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;*/
+    position: relative;
+    left: 29px;
+    font-size: 14px;
+    /*text-shadow: 0px 1px 1px;*/
+    color: rgb(222, 231, 201);
+    font-weight: 100;
+    display: inline-block;
+}
+
+p.separate-line:before {
+    left: -29px;
+    width: 24px;
+}
+
+p.separate-line:after {
+    left: calc(100% + 5px);
+    width: -webkit-calc(215px - 100% - 24px);
+}
+
+p.separate-line:before, p.separate-line::after{
+    content: '';
+    position: absolute;
+    top: 47%;
+    border-top: rgb(222, 231, 201) 1px solid;
+    /*border-top: 1px solid #143022;*/
+    /*border-bottom: 1px solid #FFFFFF;*/
+
+    /*height: 10px;*/
+}
+
+/*#super-pocket-panel-container p {*/
+    /*color: rgba(255,255,255,0.5);*/
+    /*font-weight: 100;*/
+/*}*/
