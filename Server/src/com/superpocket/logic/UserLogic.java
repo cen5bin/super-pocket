@@ -17,31 +17,39 @@ public class UserLogic {
 	 * 登录
 	 * @param email 邮箱
 	 * @param password 密码
-	 * @return
+	 * @return 0表示登录失败，否则返回uid
 	 */
-	public static boolean SignIn(String email, String password) {
-		String sql = String.format("select password, salt from user where email='%s' limit 1", email);
+	public static int SignIn(String email, String password) {
+		String sql = String.format("select uid, password, salt from user where email='%s' limit 1", email);
 		ResultSet rs = DBConnector.query(sql);
 		try {
-			if (!rs.next() || !SecureKit.encryptPassword(password, rs.getString(2)).equals(rs.getString(1))) return false;
+			if (!rs.next() || !SecureKit.encryptPassword(password, rs.getString(3)).equals(rs.getString(2))) return 0;
+			return rs.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return true;
+		return 0;
 	}
 	
-	public static String judgeUserStatus(Cookie[] cookies) {
-		if (cookies == null) return null;
+	/**
+	 * 判断用户身份，返回的是用户uid，如果尚未登录则是0
+	 * @param cookies
+	 * @return
+	 */
+	public static int judgeUserStatus(Cookie[] cookies) {
+		if (cookies == null) return 0;
 		String account = "";
 		String token = "";
+		int uid = 0;
 		for (Cookie cookie : cookies) {
 			if (cookie.getName().equals("email")) account = cookie.getValue();
 			else if (cookie.getName().equals("token")) token = cookie.getValue();
+			else if (cookie.getName().equals("uid")) uid = Integer.parseInt(cookie.getValue());
 		}
-		if (account.equals("") | token.equals("")) return null;
-		if (SecureKit.encryptCookie(account).equals(token)) return account;
-		return null;
+		if (account.equals("") | token.equals("")) return 0;
+		if (SecureKit.encryptCookie(account).equals(token)) return uid;
+		return 0;
 	}
 	
 	/**
@@ -75,12 +83,30 @@ public class UserLogic {
 		return DBConnector.update(sql);
 	}
 	
+	/**
+	 * 获取uid
+	 * @param email 用户邮箱
+	 * @return
+	 */
+	public static int getUid(String email) {
+		String sql = String.format("select uid from user where email='%s' limit 1", email);
+		ResultSet rs = DBConnector.query(sql);
+		try {
+			if (!rs.next()) return 0;
+			return rs.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
 	public static void main(String[] args) {
-		boolean ret = UserLogic.SignIn("love@gmail.com", "love77");
-		if (ret) logger.info("登录成功");
+		int uid = UserLogic.SignIn("love@gmail.com", "love77");
+		if (uid > 0) logger.info("登录成功");
 		else logger.info("登录失败");
 		
-		ret = SignUp("cen5bin@163.com", "asd123");
+		boolean ret = SignUp("cen5bin@163.com", "asd123");
 		if (ret) logger.info("注册成功");
 		else logger.info("注册失败");
 	}

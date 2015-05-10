@@ -1,35 +1,33 @@
 package com.superpocket.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.superpocket.kit.DataKit;
+import com.superpocket.logic.ContentLogic;
 import com.superpocket.logic.NetLogic;
 import com.superpocket.logic.UserLogic;
 
 /**
- * Servlet implementation class SignUp
+ * Servlet implementation class Save
  */
-@WebServlet("/Secure/SignUp")
-public class SignUp extends HttpServlet {
+@WebServlet("/Save")
+public class Save extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private static final Logger logger = LogManager.getLogger();   
+       
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SignUp() {
+    public Save() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,8 +37,6 @@ public class SignUp extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		PrintWriter out = response.getWriter();
-		out.print("zz");
 	}
 
 	/**
@@ -51,29 +47,30 @@ public class SignUp extends HttpServlet {
 		String data = DataKit.getJsonData(request.getReader());
 		try {
 			JSONObject json = new JSONObject(data);
-			String email = json.getString("email");
-			String password = json.getString("password");
-			boolean ret = UserLogic.SignUp(email, password);
+			int uid = UserLogic.judgeUserStatus(request.getCookies());
 			JSONObject retObj = new JSONObject();
-			if (ret) {
-				logger.debug("sign up success");
-				NetLogic.addCookie(response, new Cookie("email", email), false);
-				NetLogic.addCookie(response, new Cookie("token", UserLogic.generateUserToken(email)), true);
-				int uid = UserLogic.getUid(email);
-				NetLogic.addCookie(response, new Cookie("uid", uid + ""), true);
-				retObj.put("success", "yes");
-			}
-			else {
-				logger.debug("sign in failed");
+			if (uid == 0) {
 				retObj.put("success", "no");
 			}
-			response.setContentType("application/json; charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.print(retObj);
+			else {
+				JSONArray tags = json.getJSONArray("tags");
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < tags.length(); ++i) {
+					if (i > 0) sb = sb.append(",");
+					sb = sb.append(tags.get(i));
+				}
+				String title = json.getString("title");
+				String content = json.getString("content");
+				boolean ret = ContentLogic.saveData(uid, title, sb.toString(), content);
+				if (ret) retObj.put("success", "yes");
+				else retObj.put("success", "no");
+				NetLogic.writeJson(response, retObj);
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 }
