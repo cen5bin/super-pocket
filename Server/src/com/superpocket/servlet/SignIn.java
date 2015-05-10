@@ -73,9 +73,7 @@ public class SignIn extends HttpServlet {
 					retObj.put("success", "no");
 				}
 			}
-			response.setContentType("application/json; charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.print(retObj);
+			NetLogic.writeJson(response, retObj);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
