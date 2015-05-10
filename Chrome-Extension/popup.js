@@ -83,7 +83,10 @@ function sign_up() {
     console.log('begin to sign up');
     chrome.runtime.getBackgroundPage(function(background){
         background.send_request_post('Secure/SignUp', get_user_data(), function(data){
-            console.log(data);
+            if (data.success == 'yes') {
+                window.close();
+                background.clip_content();
+            }
         }, true);
     });
 }
@@ -100,13 +103,14 @@ function sign_out() {
 
 $(document).ready(function(){
     console.log('document ready');
-    sign_out();
+    //sign_out();
     $('#signin-button').click(sign_in);
     $('#signup-button').click(sign_up);
 
     //如果cookie已经存在，则自动登录
     chrome.cookies.get({url:cookie_url, name:"token"}, function(cookie){
         if (cookie) {
+            console.log(cookie);
             window.close();
             auto_sign_in();
         }
