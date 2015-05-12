@@ -14,6 +14,7 @@ create table if not exists post (
     title varchar(100) not null default '无标题',
     tags varchar(100) not null default '未分类',
     content longtext not null,
+    flag int not null default 0,
     uid int not null
 );
 
