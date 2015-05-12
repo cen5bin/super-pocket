@@ -19,6 +19,7 @@
         - `ClassifierSample`：分类器示例，写分类器时可以参考这个模板
     - `com.superpocket.dao`: 数据库相关
 
+###开发日志
 - 2015-05-08 自动登录，客户端cookie，popup UI全新设计，UI基调确定  
 - 2015-05-07 登录和注册加密，前端完善
 - 2015-05-06 重新加入popup，客户端加入了ajax，服务端加入登录和注册的servlet
