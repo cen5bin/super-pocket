@@ -1,3 +1,50 @@
+var spinner = null;
+function start_spin() {
+    $('html').append('<div id="super-pocket-loading"></div>')
+
+    var window_height = $(window).height();
+    console.log(window_height);
+    var window_width = $(window).width();
+    var container_len = 150;
+    $('#super-pocket-loading').css('width', container_len + 'px')
+        .css('height', container_len + 'px')
+        .css('left', (window_width/2-container_len/2)+'px')
+        .css('top', (window_height/2-container_len/2)+'px');
+
+    var opts = {
+        lines: 13, // The number of lines to draw
+        length: 15, // The length of each line
+        width: 6, // The line thickness
+        radius: 20, // The radius of the inner circle
+        corners: 1, // Corner roundness (0..1)
+        rotate: 19, // The rotation offset
+        color: '#ffffff', // #rgb or #rrggbb
+        speed: 1.4, // Rounds per second
+        trail: 71, // Afterglow percentage
+        shadow: false, // Whether to render a shadow
+        hwaccel: false, // Whether to use hardware acceleration
+        className: 'spinner', // The CSS class to assign to the spinner
+        zIndex: 2e9, // The z-index (defaults to 2000000000)
+        top: container_len/2+'px', // Top position relative to parent in px
+        left: container_len/2+'px' // Left position relative to parent in px
+    };
+
+
+
+    var target = document.getElementById('super-pocket-loading');
+    spinner = new Spinner(opts).spin(target);
+}
+
+function stop_spin() {
+    if (!spinner) return;
+    spinner.stop();
+    $('#super-pocket-loading').remove();
+    spinner = null;
+}
+
+
+
+
 //去除字符串前后的空白字符
 function trim(str){
     str = str.replace(/^(\s|\u00A0)+/,'');
@@ -58,6 +105,7 @@ function recover_page() {
     $('#super-pocket-panel').remove();
     document.onkeydown = key_down;
     is_clipping = false;
+    stop_spin();
 }
 
 var key_down = null;  //保存原来页面中的按键事件
@@ -90,6 +138,7 @@ chrome.runtime.onMessage.addListener(
             if (!is_clipping) {
                 add_keyboard_listener();
                 var post_id = get_post_id();
+                start_spin();
                 sendResponse({title: extract_title(post_id), content:$('#'+post_id).prop('outerHTML')});
                 clip_content(post_id);
                 show_super_pocket_panel(post_id);

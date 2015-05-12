@@ -28,6 +28,16 @@
     /*border: 1px solid black;*/
 }
 
+#super-pocket-loading {
+    width: 200px;
+    height: 200px;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 6px;
+    z-index: 2147483646;
+}
 
 
 #super-pocket-sign-panel {
