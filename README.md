@@ -27,7 +27,7 @@
 	- `icon.png`：chrome extension图标
 	- `logo.png`：应用logo，会放在`popup.html`里显示
 	- `style.css`：所有需要的css
-	- `jquery.js`,`json2.js`：需要的第三方js库
+	- `jquery.js`,`json2.js`,`spin.js`：需要的第三方js库
 
 ###开发日志
 - 2015-05-08 自动登录，客户端cookie，popup UI全新设计，UI基调确定  
