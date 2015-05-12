@@ -6,6 +6,18 @@
         - `SignIn`: 登录
         - `SignUp`: 注册
         - `Classify`: 分类
+    - `com.superpocket.kit`: 工具类
+        - `DataKit`: 数据处理。如接收客户端传来的json数据
+        - `SecureKit`: 安全，对用户信息加密等等
+        - `SettingKit`: 用户设置
+    - `com.superpocket.logic`: 逻辑层代码，所有业务逻辑代码都放在这里
+        - `ContentLogic`: 内容相关，如保存网页正文，分类等等
+        - `UserLogic`：用户相关，登录，注册等等
+        - `NetLogic`：网络相关，向客户端返回数据，写cookie等等
+    - `com.superpocket.classifier`: 分类器
+        - `ClassifierInterface`：分类器接口，所有分类器必须implement这个接口
+        - `ClassifierSample`：分类器示例，写分类器时可以参考这个模板
+    - `com.superpocket.dao`: 数据库相关
 
 - 2015-05-08 自动登录，客户端cookie，popup UI全新设计，UI基调确定  
 - 2015-05-07 登录和注册加密，前端完善
