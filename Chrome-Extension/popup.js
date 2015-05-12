@@ -10,6 +10,7 @@ function auto_sign_in() {
             if (data.success == 'yes') {
                 background.clip_content();
             }
+            else alert('链接服务器出错');
         }, true);
     });
 }

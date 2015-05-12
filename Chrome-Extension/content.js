@@ -90,9 +90,10 @@ chrome.runtime.onMessage.addListener(
             if (!is_clipping) {
                 add_keyboard_listener();
                 var post_id = get_post_id();
+                sendResponse({id: post_id, html: $('#'+post_id).html()});
                 clip_content(post_id);
                 show_super_pocket_panel(post_id);
-                sendResponse('Good Job!');
+                //sendResponse('Good Job!');
                 is_clipping = true;
             }
             else recover_page();
