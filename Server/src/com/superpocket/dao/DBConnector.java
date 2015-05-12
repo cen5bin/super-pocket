@@ -2,6 +2,7 @@ package com.superpocket.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -64,6 +65,27 @@ public class DBConnector {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return true;
+	}
+	
+	/**
+	 * 插入数据的高级用法，可以防止注入，对于那些复杂的数据也可以用这个，比如说包含引号
+	 * @param sql
+	 * @param values
+	 * @return
+	 */
+	public static boolean update(String sql, Object ...values) {
+		try {
+			PreparedStatement pst = conn.prepareStatement(sql);
+			for (int i = 0; i < values.length; ++i)
+				pst.setObject(i+1, values[i]);
+			int ret = pst.executeUpdate();
+			if (ret == -1) return false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return true;
 	}
 	

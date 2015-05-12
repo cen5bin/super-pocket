@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,7 +24,7 @@ import com.superpocket.logic.UserLogic;
 @WebServlet("/Classify")
 public class Classify extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    private static final Logger logger = LogManager.getLogger();   
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -43,7 +45,10 @@ public class Classify extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+//		request.setCharacterEncoding("utf-8");
 		String data = DataKit.getJsonData(request.getReader());
+		logger.debug(data);
+		logger.debug("Classify");
 		try {
 			JSONObject json = new JSONObject(data);
 			int uid = UserLogic.judgeUserStatus(request.getCookies());
@@ -54,14 +59,16 @@ public class Classify extends HttpServlet {
 			else {
 				String title = json.getString("title");
 				String content = json.getString("content");
+				logger.debug("title: " + title);
+//				logger.debug("content: "+ content);
 				boolean ret = ContentLogic.tempSave(uid, title, content);
 				if (ret) {
 					retObj.put("success", "yes");
 					retObj.put("labels", ContentLogic.classify(uid, title, content));
 				}
 				else retObj.put("success", "no");
-				NetLogic.writeJson(response, retObj);
 			}
+			NetLogic.writeJson(response, retObj);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

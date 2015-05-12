@@ -47,6 +47,7 @@ public class UserLogic {
 			else if (cookie.getName().equals("token")) token = cookie.getValue();
 			else if (cookie.getName().equals("uid")) uid = Integer.parseInt(cookie.getValue());
 		}
+		logger.debug(account);
 		if (account.equals("") | token.equals("")) return 0;
 		if (SecureKit.encryptCookie(account).equals(token)) return uid;
 		return 0;

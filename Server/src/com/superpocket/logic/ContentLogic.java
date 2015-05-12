@@ -22,9 +22,10 @@ public class ContentLogic {
 	 * @return
 	 */
 	public static boolean tempSave(int uid, String title, String content) {
-		String sql = String.format("insert into post(uid, title, content) values(%d, '%s', '%s')", 
-				uid, title, content);
-		return DBConnector.update(sql);
+//		String sql1 = String.format("insert into post(uid, title, content) values(%d, '%s', '%s')", 
+//				uid, title, content);
+		String sql = "insert into post(uid, title, content) values(?, ?, ?)";
+		return DBConnector.update(sql, uid, title, content);
 	}
 	
 	/**
