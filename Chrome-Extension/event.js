@@ -24,12 +24,27 @@ function send_request_post(servlet, data, callback, secure) {
     });
 }
 
+
+//服务端登录和注册的url前缀，需要根据实际情况配置
+var server_host = '10.211.55.8';
+var cookie_url = 'https://'+server_host+':8443/Server/Secure/';
+var cookie_url1 = 'http://'+server_host+':8080/Server/';
+
 /**
  * 向服务端发送待分类的网页正文
  * @param data
  */
 function send_data_to_classify(data) {
-
+    chrome.cookies.get({url:cookie_url1, name:"token"}, function(cookie){
+        console.log(cookie);
+        if (cookie) {
+            //data = {title: '你好', content: '哈哈'};
+            send_request_post('Classify', data, function(response){
+                //这里是从服务端传回分类结果后调用的函数
+                console.log(response);
+            });
+        }
+    });
 }
 
 
@@ -37,7 +52,7 @@ function send_data_to_classify(data) {
 function clip_content() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
         chrome.tabs.sendMessage(tabs[0].id, {method: 'clip'}, function(response){
-            console.log(response.html);
+            console.log(response);
             send_data_to_classify(response);
 
         });

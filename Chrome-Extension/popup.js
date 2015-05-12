@@ -63,6 +63,34 @@ function sign_in_failed() {
     $($('.input-container')[0]).append('<p>邮箱或者密码错误</p>');
 }
 
+//服务端登录和注册的url前缀，需要根据实际情况配置
+var server_host = '10.211.55.8';
+var cookie_url = 'https://'+server_host+':8443/Server/Secure/';
+var cookie_url1 = 'http://'+server_host+':8080/Server/';
+
+/**
+ * 将cookie_url对应的那些cookie在cookie_url1中也写一份
+ * @param callback
+ */
+function set_cookie(callback) {
+    console.log('set_cookie');
+    chrome.cookies.get({url:cookie_url, name:'email'}, function(cookie){
+        console.log(cookie);
+        chrome.cookies.set({url:cookie_url1, name:'email', value: cookie.value, expirationDate: 3578902847.485571}, function(cookie){
+            console.log(cookie);
+            chrome.cookies.get({url:cookie_url, name:'token'}, function(cookie){
+                chrome.cookies.set({url:cookie_url1, name:'token', value: cookie.value, expirationDate: 3578902847.485571}, function(cookie){
+                    chrome.cookies.get({url:cookie_url, name:'uid'}, function(cookie){
+                        chrome.cookies.set({url:cookie_url1, name:'uid', value: cookie.value, expirationDate: 3578902847.485571}, function(cookie){
+                            callback();
+                        });
+                    });
+                });
+            });
+        });
+    });
+}
+
 //登录功能
 function sign_in() {
     if (!judge_user_data_valid()) return;
@@ -70,8 +98,10 @@ function sign_in() {
     chrome.runtime.getBackgroundPage(function(background){
         background.send_request_post('Secure/SignIn', get_user_data(), function(data){
             if (data.success == 'yes') {
-                window.close();
-                background.clip_content();
+                set_cookie(function(){
+                    //window.close();
+                    background.clip_content();
+                });
             }
             else sign_in_failed();
         }, true);
@@ -85,15 +115,18 @@ function sign_up() {
     chrome.runtime.getBackgroundPage(function(background){
         background.send_request_post('Secure/SignUp', get_user_data(), function(data){
             if (data.success == 'yes') {
-                window.close();
-                background.clip_content();
+                set_cookie(function(){
+                    window.close();
+                    background.clip_content();
+                });
+                //window.close();
+                //background.clip_content();
             }
         }, true);
     });
 }
 
-//服务端登录和注册的url前缀，需要根据实际情况配置
-var cookie_url = 'https://10.211.55.8:8443/Server/Secure/';
+
 
 //注销功能
 function sign_out() {
