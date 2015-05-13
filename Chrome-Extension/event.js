@@ -42,6 +42,14 @@ function send_data_to_classify(data) {
             send_request_post('Classify', data, function(response){
                 //这里是从服务端传回分类结果后调用的函数
                 console.log(response);
+
+                chrome.tabs.query({active:true, currentWindow:true}, function(tabs){
+                    chrome.tabs.sendMessage(tabs[0].id, {method: 'show_result', data: response}, function(response){
+                        console.log(response);
+                    });
+                });
+
+
             });
         }
     });

@@ -1,3 +1,4 @@
+//加载动画
 var spinner = null;
 function start_spin() {
     $('html').append('<div id="super-pocket-loading"></div>')
@@ -35,6 +36,7 @@ function start_spin() {
     spinner = new Spinner(opts).spin(target);
 }
 
+//停止加载动画
 function stop_spin() {
     if (!spinner) return;
     spinner.stop();
@@ -140,12 +142,20 @@ chrome.runtime.onMessage.addListener(
                 var post_id = get_post_id();
                 start_spin();
                 sendResponse({title: extract_title(post_id), content:$('#'+post_id).prop('outerHTML')});
-                clip_content(post_id);
-                show_super_pocket_panel(post_id);
+                //clip_content(post_id);
+                //show_super_pocket_panel(post_id);
                 //sendResponse('Good Job!');
                 is_clipping = true;
             }
             else recover_page();
+        }
+        else if (request.method == 'show_result') {
+
+            var post_id = get_post_id();
+            clip_content(post_id);
+            show_super_pocket_panel(post_id);
+            stop_spin();
+            sendResponse('zzz');
         }
     }
 );
