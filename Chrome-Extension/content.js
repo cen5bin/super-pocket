@@ -44,9 +44,6 @@ function stop_spin() {
     spinner = null;
 }
 
-
-
-
 //去除字符串前后的空白字符
 function trim(str){
     str = str.replace(/^(\s|\u00A0)+/,'');
@@ -91,12 +88,16 @@ function clip_content(post_div) {
 }
 
 //显示剪藏功能的控制面板
-function show_super_pocket_panel(post_id) {
-    $('html').append('<iframe id="super-pocket-panel" scrolling="no" src="'+ encodeURI(chrome.extension.getURL('panel.html') +
-    '?title=' + extract_title(post_id)) + '"></iframe>');
-    //$('#super-pocket-panel').load(function(){
-    //    extract_title(post_id);
-    //});
+function show_super_pocket_panel(post_id, labels) {
+
+    var url = chrome.extension.getURL('panel.html') + '?title=' + extract_title(post_id);
+
+
+
+    $('html').append('<iframe id="super-pocket-panel" scrolling="no" src="'+ encodeURI(url) + '"></iframe>');
+    $('#super-pocket-panel').load(function(){
+        $('#super-pocket-panel')[0].contentWindow.postMessage(labels, '*');
+    });
 
 }
 
@@ -130,7 +131,6 @@ function get_post_id() {
     return 'article_details';
 }
 
-
 //消息监听
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -153,7 +153,7 @@ chrome.runtime.onMessage.addListener(
 
             var post_id = get_post_id();
             clip_content(post_id);
-            show_super_pocket_panel(post_id);
+            show_super_pocket_panel(post_id, request.data);
             stop_spin();
             sendResponse('zzz');
         }

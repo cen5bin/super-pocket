@@ -22,4 +22,11 @@ $(document).ready(function(){
     //var url = window.location.href;
     var title = decodeURI(getUrlVar('title'));
     $('#super-pocket-panel-title').val(title);
+
+    window.addEventListener('message', function(event){
+        console.log(event.data);
+    });
+
+
+    //console.log(window.parent.document);
 });
