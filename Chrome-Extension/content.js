@@ -141,6 +141,7 @@ chrome.runtime.onMessage.addListener(
                 add_keyboard_listener();
                 var post_id = get_post_id();
                 start_spin();
+                console.log(extract_title(post_id));
                 sendResponse({title: extract_title(post_id), content:$('#'+post_id).prop('outerHTML')});
                 //clip_content(post_id);
                 //show_super_pocket_panel(post_id);
