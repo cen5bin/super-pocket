@@ -23,8 +23,21 @@ $(document).ready(function(){
     var title = decodeURI(getUrlVar('title'));
     $('#super-pocket-panel-title').val(title);
 
+    $('#super-pocket-panel-close-button').click(function(){
+        parent.postMessage({name:'close-panel'}, '*');
+    });
+
+    $('#super-pocket-panel-save-button').click(function(){
+        parent.postMessage({name:'save-result', data:'asd'}, '*');
+    });
+
     window.addEventListener('message', function(event){
         console.log(event.data);
+        var labels = event.data.labels;
+        for (var i = 0; i < labels.length; ++i)
+        $('#recommend-content-labels').append('<input type="checkbox">' + labels[i]+'<br>');
+
+
     });
 
 

@@ -119,8 +119,6 @@ function sign_up() {
                     window.close();
                     background.clip_content();
                 });
-                //window.close();
-                //background.clip_content();
             }
         }, true);
     });
@@ -145,7 +143,7 @@ $(document).ready(function(){
     chrome.cookies.get({url:cookie_url, name:"token"}, function(cookie){
         if (cookie) {
             console.log(cookie);
-            //window.close();
+            window.close();
             auto_sign_in();
         }
     });

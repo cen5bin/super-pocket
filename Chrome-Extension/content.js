@@ -160,3 +160,13 @@ chrome.runtime.onMessage.addListener(
         }
     }
 );
+
+window.addEventListener('message', function(event){
+
+    //这个事件由点击super-pocket-panel的关闭按钮触发
+    if (event.data.name == 'close-panel')
+        recover_page();
+    else if (event.data.name == 'save-result') { //点击super-pocket-panel保存按钮
+        alert('zzz');
+    }
+});
