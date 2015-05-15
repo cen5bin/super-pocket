@@ -74,19 +74,23 @@ public class DBConnector {
 	 * @param values
 	 * @return
 	 */
-	public static boolean update(String sql, Object ...values) {
+	public static int update(String sql, Object ...values) {
+		int ret = 0;
 		try {
-			PreparedStatement pst = conn.prepareStatement(sql);
+			PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			for (int i = 0; i < values.length; ++i)
 				pst.setObject(i+1, values[i]);
-			int ret = pst.executeUpdate();
-			if (ret == -1) return false;
+			ret = pst.executeUpdate();
+			if (ret == -1) return -1;
+			ResultSet keys = pst.getGeneratedKeys();
+			if (keys.next())
+				ret = keys.getInt(1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return true;
+		return ret;
 	}
 	
 	public static void main(String[] args) {

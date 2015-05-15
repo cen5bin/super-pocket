@@ -53,16 +53,16 @@ public class Save extends HttpServlet {
 				retObj.put("success", "no");
 			}
 			else {
-				JSONArray tags = json.getJSONArray("tags");
+				JSONArray labels = json.getJSONArray("labels");
 				StringBuilder sb = new StringBuilder();
-				for (int i = 0; i < tags.length(); ++i) {
+				for (int i = 0; i < labels.length(); ++i) {
 					if (i > 0) sb = sb.append(",");
-					sb = sb.append(tags.get(i));
+					sb = sb.append(labels.get(i));
 				}
-				String title = json.getString("title");
-				String content = json.getString("content");
-				boolean ret = ContentLogic.saveData(uid, title, sb.toString(), content);
-				if (ret) retObj.put("success", "yes");
+				if (sb.length() == 0) sb.append("未分类");
+				int post_id = json.getInt("post_id");
+				boolean ret = ContentLogic.save(post_id, sb.toString());
+						if (ret) retObj.put("success", "yes");
 				else retObj.put("success", "no");
 				NetLogic.writeJson(response, retObj);
 			}

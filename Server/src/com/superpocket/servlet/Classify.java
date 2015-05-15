@@ -47,7 +47,6 @@ public class Classify extends HttpServlet {
 		// TODO Auto-generated method stub
 //		request.setCharacterEncoding("utf-8");
 		String data = DataKit.getJsonData(request.getReader());
-		logger.debug(data);
 		logger.debug("Classify");
 		try {
 			JSONObject json = new JSONObject(data);
@@ -61,13 +60,15 @@ public class Classify extends HttpServlet {
 				String content = json.getString("content");
 				logger.debug("title: " + title);
 //				logger.debug("content: "+ content);
-				boolean ret = ContentLogic.tempSave(uid, title, content);
-				if (ret) {
+				int ret = ContentLogic.tempSave(uid, title, content);
+				if (ret > 0) {
 					retObj.put("success", "yes");
 					retObj.put("labels", ContentLogic.classify(uid, title, content));
+					retObj.put("post_id", ret);
 				}
 				else retObj.put("success", "no");
 			}
+			logger.debug(retObj);
 			NetLogic.writeJson(response, retObj);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
