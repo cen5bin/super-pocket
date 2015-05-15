@@ -55,6 +55,19 @@ function send_data_to_classify(data) {
     });
 }
 
+/**
+ * 保存内容
+ * @param data
+ */
+function save_to_server(data) {
+    chrome.cookies.get({url:cookie_url1, name:'token'}, function(cookie){
+        if (cookie) {
+            send_request_post('Save', data, function(response){
+                console.log(response);
+            });
+        }
+    });
+}
 
 //获取网页正文
 function clip_content() {
@@ -66,6 +79,15 @@ function clip_content() {
         });
     });
 }
+
+//监听消息
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+    //console.log(request);
+    if (request.method == 'save_to_server')
+        //console.log(request);
+        save_to_server(request.data);
+});
+
 
 
 //点击按钮时，调用这个函数

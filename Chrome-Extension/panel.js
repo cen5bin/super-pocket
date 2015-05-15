@@ -18,6 +18,22 @@ function getUrlVar(name){
     return getUrlVars()[name];
 }
 
+//获取分类结果
+function getLabels() {
+    var ret = [];
+    $('#recommend-content-labels > input[type=checkbox]').each(function(){
+        if (this.checked) ret.push($(this).val());
+    });
+
+    var custom_labels = $('#custom-labels').val();
+    if (custom_labels.length == 0) return ret;
+    console.log(custom_labels);
+    custom_labels = custom_labels.split(',');
+    for (var i = 0; i < custom_labels.length; ++i)
+        ret.push(custom_labels[i]);
+    return ret;
+}
+
 $(document).ready(function(){
     //var url = window.location.href;
     var title = decodeURI(getUrlVar('title'));
@@ -28,18 +44,19 @@ $(document).ready(function(){
     });
 
     $('#super-pocket-panel-save-button').click(function(){
-        parent.postMessage({name:'save-result', data:'asd'}, '*');
+        //getLabels();
+        parent.postMessage({name:'save-result', data:getLabels()}, '*');
     });
+
+    document.onkeydown = function(event) {
+        if (event.keyCode == 27) parent.postMessage({name:'close-panel'}, '*');
+    };
 
     window.addEventListener('message', function(event){
         console.log(event.data);
         var labels = event.data.labels;
         for (var i = 0; i < labels.length; ++i)
-        $('#recommend-content-labels').append('<input type="checkbox">' + labels[i]+'<br>');
-
-
+        $('#recommend-content-labels').append('<input type="checkbox" value="' + labels[i] + '">' + labels[i] +'<br>');
     });
 
-
-    //console.log(window.parent.document);
 });

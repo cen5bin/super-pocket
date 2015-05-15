@@ -89,11 +89,7 @@ function clip_content(post_div) {
 
 //显示剪藏功能的控制面板
 function show_super_pocket_panel(post_id, labels) {
-
     var url = chrome.extension.getURL('panel.html') + '?title=' + extract_title(post_id);
-
-
-
     $('html').append('<iframe id="super-pocket-panel" scrolling="no" src="'+ encodeURI(url) + '"></iframe>');
     $('#super-pocket-panel').load(function(){
         $('#super-pocket-panel')[0].contentWindow.postMessage(labels, '*');
@@ -131,6 +127,8 @@ function get_post_id() {
     return 'article_details';
 }
 
+var pid = 0;  //服务器上临时存储的此文的pid
+
 //消息监听
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -143,16 +141,13 @@ chrome.runtime.onMessage.addListener(
                 start_spin();
                 console.log(extract_title(post_id));
                 sendResponse({title: extract_title(post_id), content:$('#'+post_id).prop('outerHTML')});
-                //clip_content(post_id);
-                //show_super_pocket_panel(post_id);
-                //sendResponse('Good Job!');
                 is_clipping = true;
             }
             else recover_page();
         }
-        else if (request.method == 'show_result') {
-
+        else if (request.method == 'show_result') {  //显示分类结果，调出super-pocket-panel
             var post_id = get_post_id();
+            pid = request.data.post_id;
             clip_content(post_id);
             show_super_pocket_panel(post_id, request.data);
             stop_spin();
@@ -167,6 +162,11 @@ window.addEventListener('message', function(event){
     if (event.data.name == 'close-panel')
         recover_page();
     else if (event.data.name == 'save-result') { //点击super-pocket-panel保存按钮
-        alert('zzz');
+        console.log(event.data.data);
+        if (pid == 0) return;
+        //将结果发回给event.js，让他提交服务器
+        chrome.runtime.sendMessage({method:'save_to_server', data:{post_id: pid, labels: event.data.data}}, function(response){
+
+        });
     }
 });
