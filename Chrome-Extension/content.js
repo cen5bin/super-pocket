@@ -122,7 +122,8 @@ function add_keyboard_listener() {
 
 //获取文章的div的id
 function get_post_id() {
-    //return 'topics';
+    //return 'content';
+    return 'topics';
     //return 'mainContent';
     return 'article_details';
 }
@@ -140,7 +141,7 @@ chrome.runtime.onMessage.addListener(
                 var post_id = get_post_id();
                 start_spin();
                 console.log(extract_title(post_id));
-                sendResponse({title: extract_title(post_id), content:$('#'+post_id).prop('outerHTML')});
+                sendResponse({title: extract_title(post_id), content:$('#'+post_id).prop('outerHTML'), url: window.location.href});
                 is_clipping = true;
             }
             else recover_page();

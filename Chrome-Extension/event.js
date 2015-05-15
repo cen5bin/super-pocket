@@ -35,6 +35,7 @@ var cookie_url1 = 'http://'+server_host+':8080/Server/';
  * @param data
  */
 function send_data_to_classify(data) {
+    console.log(data);
     chrome.cookies.get({url:cookie_url1, name:"token"}, function(cookie){
         console.log(cookie);
         if (cookie) {

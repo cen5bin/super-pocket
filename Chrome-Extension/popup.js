@@ -144,6 +144,7 @@ $(document).ready(function(){
         if (cookie) {
             console.log(cookie);
             window.close();
+            //console.log(document.head);
             auto_sign_in();
         }
     });
