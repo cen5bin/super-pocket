@@ -58,9 +58,11 @@ public class Classify extends HttpServlet {
 			else {
 				String title = json.getString("title");
 				String content = json.getString("content");
-				logger.debug("title: " + title);
+				String url = json.getString("url");
+				String head = ContentLogic.getHtmlHeader(url);
+				logger.debug(head);
 //				logger.debug("content: "+ content);
-				int ret = ContentLogic.tempSave(uid, title, content);
+				int ret = ContentLogic.tempSave(uid, title, content, head);
 				if (ret > 0) {
 					retObj.put("success", "yes");
 					retObj.put("labels", ContentLogic.classify(uid, title, content));

@@ -56,6 +56,27 @@ public class DBConnector {
 		return ret;
 	}
 	
+	/**
+	 * 查询数据的高级用法
+	 * @param sql
+	 * @param values
+	 * @return
+	 */
+	public static ResultSet query(String sql, Object ...values) {
+		ResultSet rs = null;
+		try {
+			PreparedStatement pst = conn.prepareStatement(sql);
+			for (int i = 0; i < values.length; ++i)
+				pst.setObject(i+1, values[i]);
+			rs = pst.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rs;
+	}
+	
+	
 	public static boolean update(String sql) {
 		try {
 			int ret = st.executeUpdate(sql);

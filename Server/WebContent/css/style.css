@@ -1,0 +1,34 @@
+@CHARSET "UTF-8";
+
+html, body {
+    color: rgb(34,34,34);
+    font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "WenQuanYi Micro Hei", sans-serif;
+    font-weight: normal;
+     word-wrap: break-word;
+    text-align: left !important;
+    background: white !important;
+/*     word-break: break-all; */
+}
+
+a {
+	text-decoration: none !important;
+    color: #666666 !important;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1 a{
+    color: black !important;
+}
+
+h1 a:hover{
+    text-decoration: none;
+}
+
+#sp-main-container {
+    /*max-width: 700px;*/
+    width: 750px;
+    margin: auto;
+}

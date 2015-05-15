@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.superpocket.kit.DataKit;
+import com.superpocket.logic.ContentLogic;
 import com.superpocket.logic.NetLogic;
 import com.superpocket.logic.UserLogic;
 
@@ -41,6 +42,8 @@ public class SignIn extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		out.print("asd");
+		
+		ContentLogic.getHtmlHeader("http://blog.csdn.net/wangqiuyun/article/details/11483261");
 	}
 
 	/**
