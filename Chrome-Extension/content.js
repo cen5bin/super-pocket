@@ -153,6 +153,14 @@ chrome.runtime.onMessage.addListener(
             stop_spin();
             sendResponse('zzz');
         }
+        else if (request.method == 'response_save') {
+            stop_spin();
+            if (request.data.success == 'yes') {
+                recover_page();
+                alert('保存成功');
+            }
+            else alert('保存失败');
+        }
     }
 );
 
@@ -165,6 +173,7 @@ window.addEventListener('message', function(event){
         console.log(event.data.data);
         if (pid == 0) return;
         //将结果发回给event.js，让他提交服务器
+        start_spin();
         chrome.runtime.sendMessage({method:'save_to_server', data:{post_id: pid, labels: event.data.data}}, function(response){
 
         });
