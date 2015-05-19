@@ -7,6 +7,7 @@ html, body {
      word-wrap: break-word;
     text-align: left !important;
     background: white !important;
+    margin: 0;
 /*     word-break: break-all; */
 }
 
@@ -31,4 +32,40 @@ h1 a:hover{
     /*max-width: 700px;*/
     width: 750px;
     margin: auto;
+}
+
+#sp-main {
+    height: 100%;
+}
+
+.sp-main-iframe {
+    float: left;
+    display: inline;
+    height: 100%;
+    border: 0;
+}
+
+#sp-side-bar {
+    width: 200px;
+    background-color: red;
+    /*max-width: 200px;*/
+}
+
+#sp-post-list {
+    width: 300px;
+    background-color: black;
+}
+
+#sp-post-content {
+    width: calc(100% - (500px));
+    width: -moz-calc(100% - (500px));
+    width: -webkit-calc(100% - (500px));
+    background-color: green;
+}
+
+
+
+#sp-sidebar-div li {
+	list-style:none;
+    margin: 0;
 }
