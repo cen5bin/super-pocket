@@ -2,8 +2,6 @@
  * Created by wubincen on 15/5/19.
  */
 
-
-
 function classes_is_showing() {
     var display = $('#sp-class-list').css('display');
     //console.log(display);
@@ -41,4 +39,16 @@ function show_classes() {
 
 function show_all_post(){
     hide_classes();
+    $('#sp-admin-content').attr('src', 'postlist.jsp');
+}
+
+
+function show_posts_in(tag) {
+	hide_classes();
+	$('#sp-admin-content').attr('src', encodeURI('postlist.jsp?tag='+tag));
+}
+
+function show_post_content(pid) {
+	hide_classes();
+	$('#sp-admin-content').attr('src', encodeURI('content.jsp?pid='+pid));
 }

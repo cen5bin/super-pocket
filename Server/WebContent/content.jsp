@@ -9,7 +9,8 @@
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <!-- <title>Insert title here</title> -->
 <%
-	JSONObject json = ContentLogic.getPost(230);
+	int pid = Integer.parseInt(request.getParameter("pid"));
+	JSONObject json = ContentLogic.getPost(pid);
 	%>
 <%=json.get("head") %>
 </head>
