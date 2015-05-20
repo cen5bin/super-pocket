@@ -2,6 +2,7 @@ package com.superpocket.logic;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.servlet.http.Cookie;
 
@@ -102,6 +103,32 @@ public class UserLogic {
 		return 0;
 	}
 	
+	/**
+	 * 获取uid对应的用户的所有分类
+	 * @param uid
+	 * @return
+	 */
+	public static HashMap<String, Integer> getTagList(int uid) {
+		HashMap<String, Integer> ret = new HashMap<String, Integer>();
+		String sql = String.format("select tags from post where uid=? and flag=1");
+		ResultSet rs = DBConnector.query(sql, uid);
+		try {
+			while (rs.next()) {
+				String[] tags = rs.getString(1).split(",");
+				for (String tag : tags)
+					if (ret.get(tag) == null) ret.put(tag, 1);
+					else {
+						int c = ret.get(tag) + 1;
+						ret.put(tag, c);
+					}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
 	public static void main(String[] args) {
 		int uid = UserLogic.SignIn("love@gmail.com", "love77");
 		if (uid > 0) logger.info("登录成功");
@@ -110,5 +137,8 @@ public class UserLogic {
 		boolean ret = SignUp("cen5bin@163.com", "asd123");
 		if (ret) logger.info("注册成功");
 		else logger.info("注册失败");
+		
+		HashMap<String, Integer> tt = UserLogic.getTagList(2);
+		for (String key : tt.keySet()) logger.debug(key+": " + tt.get(key));
 	}
 }

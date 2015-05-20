@@ -1,10 +1,5 @@
 package com.superpocket.logic;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,8 +11,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.superpocket.dao.DBConnector;
-import com.superpocket.kit.RegexKit;
+import com.superpocket.entity.PostItem;
 import com.superpocket.kit.SettingKit;
+import com.superpocket.kit.TimeKit;
 
 public class ContentLogic {
 	
@@ -31,13 +27,21 @@ public class ContentLogic {
 	
 	/**
 	 * 正式保存文章，需要讲flag置为1
+	 * @param uid
 	 * @param pid
 	 * @param tags
 	 * @return
 	 */
-	public static boolean save(int pid, String tags) {
-		String sql = "update post set flag=1, tags=? where pid=?";
-		int ret = DBConnector.update(sql, tags, pid);
+	public static boolean save(int uid, int pid, String tags) {
+		String sql = "update post set flag=1, tags=?, time=? where pid=? and uid=?";
+		int ret = DBConnector.update(sql, tags, TimeKit.now(), pid, uid);
+		if (ret == -1) return false;
+		String tmp = new String("insert into pt(uid, pid, tag) values(?,?,?)");
+		String[] tt = tags.split(",");
+		for (String s : tt) {
+			ret = DBConnector.update(tmp, uid, pid, s);
+			if (ret == -1) return false;
+		}
 		return ret != -1;
 	}
 	
@@ -47,11 +51,12 @@ public class ContentLogic {
 	 * @param title 网页标题
 	 * @param content 正文内容
 	 * @param head 网页head
+	 * @param plain 去掉标签的正文
 	 * @return
 	 */
-	public static int tempSave(int uid, String title, String content, String head) {
-		String sql = "insert into post(uid, title, content, head) values(?, ?, ?, ?)";
-		return DBConnector.update(sql, uid, title, content, head);
+	public static int tempSave(int uid, String title, String content, String head, String plain) {
+		String sql = "insert into post(uid, title, content, head, plain) values(?, ?, ?, ?, ?)";
+		return DBConnector.update(sql, uid, title, content, head, plain);
 	}
 	
 	/**
@@ -93,32 +98,55 @@ public class ContentLogic {
 		return json;
 	}
 	
-	public static String getHtmlHeader(String htmlUrl) {
-		logger.debug("zzzz");
+	/**
+	 * 获取uid分类为tag的所有文章
+	 * @param uid 
+	 * @param tag
+	 * @return
+	 */
+	public static ArrayList<PostItem> getPostListByTag(int uid, String tag) {
+		ArrayList<PostItem> ret = new ArrayList<PostItem>();
+		String sql = "select title, post.pid, tags, plain, time from post inner join (select distinct pid from pt where uid=? and tag=?) as a1 on a1.pid=post.pid order by time desc";
+		ResultSet rs = DBConnector.query(sql, uid, tag);
 		try {
-			URL url = new URL(htmlUrl);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setDoInput(true);
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");  
-			
-			int res = connection.getResponseCode();
-			logger.debug(res);
-			if (res == 200) {
-				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				String string = "";
-				StringBuilder sb = new StringBuilder();
-				while ((string = in.readLine()) != null) sb.append(string);
-				in.close();
-				return RegexKit.getHeader(sb.toString());
+			while (rs.next()) {
+				PostItem item = new PostItem(rs.getString(1), rs.getInt(2), 
+						rs.getString(3), rs.getString(4), rs.getString(5));
+				ret.add(item);
 			}
-			
-			
-			
-		} catch (IOException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return "";
+		return ret;
+	}
+	
+	
+	/**
+	 * 获取uid的全部文章
+	 * @param uid
+	 * @return
+	 */
+	public static ArrayList<PostItem> getAllPost(int uid) {
+		ArrayList<PostItem> ret = new ArrayList<PostItem>();
+		String sql = "select title, pid, tags, plain, time from post where uid=? order by time desc";
+		ResultSet rs = DBConnector.query(sql, uid);
+		try {
+			while (rs.next()) {
+				PostItem item = new PostItem(rs.getString(1), rs.getInt(2), 
+						rs.getString(3), rs.getString(4), rs.getString(5));
+				ret.add(item);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	public static void main(String[] args) {
+		ArrayList<PostItem> ret = getAllPost(2);
+		for (PostItem item : ret) logger.debug(item.getTitle() + ": " + item.getPid() + "， " + item.getTags());
+		
 	}
 }

@@ -93,7 +93,7 @@ public class DBConnector {
 	 * 插入数据的高级用法，可以防止注入，对于那些复杂的数据也可以用这个，比如说包含引号
 	 * @param sql
 	 * @param values
-	 * @return
+	 * @return 返回最新插入的id
 	 */
 	public static int update(String sql, Object ...values) {
 		int ret = 0;

@@ -16,10 +16,21 @@ create table if not exists post (
     content longtext not null,
     flag int not null default 0,
     head longtext not null,
+    uid int not null,
+    plain longtext not null,
+    time datetime not null default '2015-05-01'
+);
+
+/*post tag对应表*/
+create table if not exists pt (
+    ptid int primary key not null auto_increment,
+    pid int not null,
+    tag varchar(100) not null,
     uid int not null
 );
 
-alter table post add foreign key fk1(uid) references user(uid);
-
-/*插入几个测试用户*/
-/*insert into user(email, password, salt) values('test@gmail.com', '123456', '111'), ('love@gmail.com', 'love77', '222');*/
+/*alter table post add foreign key fk1(uid) references user(uid);
+alter table user add index(email);
+alter table post add index(uid);*/
+alter table pt add foreign key fk2(uid) references user(uid);
+alter table pt add foreign key fk3(pid) references post(pid);

@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.superpocket.kit.DataKit;
+import com.superpocket.kit.HtmlKit;
 import com.superpocket.logic.ContentLogic;
 import com.superpocket.logic.NetLogic;
 import com.superpocket.logic.UserLogic;
@@ -59,10 +60,9 @@ public class Classify extends HttpServlet {
 				String title = json.getString("title");
 				String content = json.getString("content");
 				String url = json.getString("url");
-				String head = ContentLogic.getHtmlHeader(url);
-				logger.debug(head);
-//				logger.debug("content: "+ content);
-				int ret = ContentLogic.tempSave(uid, title, content, head);
+				String head = HtmlKit.getHtmlHeader(url);
+				String plain = HtmlKit.getPlainHtml(content, 200);
+				int ret = ContentLogic.tempSave(uid, title, content, head, plain);
 				if (ret > 0) {
 					retObj.put("success", "yes");
 					retObj.put("labels", ContentLogic.classify(uid, title, content));

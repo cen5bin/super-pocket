@@ -61,7 +61,7 @@ public class Save extends HttpServlet {
 				}
 				if (sb.length() == 0) sb.append("未分类");
 				int post_id = json.getInt("post_id");
-				boolean ret = ContentLogic.save(post_id, sb.toString());
+				boolean ret = ContentLogic.save(uid, post_id, sb.toString());
 						if (ret) retObj.put("success", "yes");
 				else retObj.put("success", "no");
 				NetLogic.writeJson(response, retObj);
