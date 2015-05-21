@@ -90,7 +90,7 @@ public class ContentLogic {
 			.put("head", rs.getString(4))
 			.put("content", rs.getString(3))
 			;
-			logger.debug(json.get("head"));
+//			logger.debug(json.get("head"));
 		} catch (JSONException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,7 +129,7 @@ public class ContentLogic {
 	 */
 	public static ArrayList<PostItem> getAllPost(int uid) {
 		ArrayList<PostItem> ret = new ArrayList<PostItem>();
-		String sql = "select title, pid, tags, plain, time from post where uid=? order by time desc";
+		String sql = "select title, pid, tags, plain, time from post where uid=? and flag = 1 order by time desc";
 		ResultSet rs = DBConnector.query(sql, uid);
 		try {
 			while (rs.next()) {

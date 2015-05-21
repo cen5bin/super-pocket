@@ -104,6 +104,24 @@ public class UserLogic {
 	}
 	
 	/**
+	 * 根据uid获取email
+	 * @param uid
+	 * @return
+	 */
+	public static String getEmail(int uid) {
+		String sql = "select email from user where uid=? limit 1";
+		ResultSet rs = DBConnector.query(sql, uid);
+		try {
+			if (!rs.next()) return null;
+			return rs.getString(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
 	 * 获取uid对应的用户的所有分类
 	 * @param uid
 	 * @return

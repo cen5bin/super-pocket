@@ -1,3 +1,6 @@
+<%@page import="com.superpocket.logic.UserLogic"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -30,10 +33,20 @@
         </div>
 
     </div>
+    
+    <%
+    if (request.getParameter("uid") == null) {
+		response.sendRedirect(request.getContextPath()+"/");
+		return;
+	}
+	int uid = Integer.parseInt(request.getParameter("uid"));
+    %>
+    
 <div id="sp-account">
     <img src="img/man.png">
     
-    cen5bin@163.com</div>
+    <%=UserLogic.getEmail(uid) %> &nbsp;
+    <a href="#" style="text-decoration:underline; color:rgb(0,190,107); font-size:12px;">注销</a></div>
 </div>
 
 <script>

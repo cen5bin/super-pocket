@@ -39,13 +39,13 @@ function show_classes() {
 
 function show_all_post(){
     hide_classes();
-    $('#sp-admin-content').attr('src', 'postlist.jsp');
+    $('#sp-admin-content').attr('src', 'postlist.jsp?uid=' + $('#sp-admin-uid').val());
 }
 
 
 function show_posts_in(tag) {
 	hide_classes();
-	$('#sp-admin-content').attr('src', encodeURI('postlist.jsp?tag='+tag));
+	$('#sp-admin-content').attr('src', encodeURI('postlist.jsp?tag='+tag+'&uid=' + $('#sp-admin-uid').val()));
 }
 
 function show_post_content(pid) {

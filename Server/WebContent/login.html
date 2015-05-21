@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/jquery.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<div id="sp-login-top-bar">
+
+
+    <form method="post" id="sp-sign-form">
+        <img src="img/logo-main.png">
+    <div id="sp-login-form">
+        <div class="sp-input-container">
+            <input type="text" placeholder="email" name="email">
+        </div>
+        <div class="sp-input-container">
+            <input type="text" placeholder="password" name="password">
+        </div>
+
+        <button id="sp-login-button" class="dark">登 录</button>
+        <button id="sp-signup-button">注 册</button>
+		
+    </div>
+    <input type="hidden" value="1" name="from-web">
+    </form>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $('#sp-login-button').click(function(){
+            $('#sp-sign-form').attr('action', './WebLogin').submit();
+        });
+        
+        $('#sp-signup-button').click(function(){
+        	$('#sp-sign-form').attr('action', './Secure/SignUp').submit();
+        });
+    });
+</script>
+
+</body>
+</html>

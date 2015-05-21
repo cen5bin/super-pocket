@@ -17,10 +17,15 @@ html, body {
 </style>
 </head>
 <body>
-	<% ArrayList<PostItem> items = null;
+	<% 
+	if (request.getParameter("uid") == null) {
+		response.sendRedirect(request.getContextPath()+"/");
+		return;
+	}
+	int uid = Integer.parseInt(request.getParameter("uid"));
+	ArrayList<PostItem> items = null;
 	ContentLogic.getAllPost(2); 
 	String tag = request.getParameter("tag");
-	int uid = 2;
 	if (tag != null) {
 		tag = new String(tag.getBytes("ISO8859_1"), "utf-8");
 		items = ContentLogic.getPostListByTag(uid, tag);

@@ -51,6 +51,7 @@ public class SignIn extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		try {
 			JSONObject retObj = new JSONObject();
 			if (UserLogic.judgeUserStatus(request.getCookies()) != 0) {
@@ -59,19 +60,34 @@ public class SignIn extends HttpServlet {
 			}
 			else {
 				logger.debug("sign in");
-				String data = DataKit.getJsonData(request.getReader());
-				JSONObject json = new JSONObject(data);
-				String email = json.getString("email");
-				String password = json.getString("password");
+				String email = "";
+				String password = "";
+				boolean fromWeb = false;
+				if (false && request.getParameter("from-web").equals("1")) {
+					logger.debug("zz");
+					email = request.getParameter("email");
+					password = request.getParameter("password");
+					fromWeb = true;
+				}
+				else {
+					String data = DataKit.getJsonData(request.getReader());
+					logger.debug(data);
+					JSONObject json = new JSONObject(data);
+					logger.debug(json);
+					email = json.getString("email");
+					password = json.getString("password");
+				}
 				int uid = UserLogic.SignIn(email, password);
 				if (uid > 0) {
 					logger.debug("sign in success");
 					NetLogic.addCookie(response, new Cookie("email", email), false);
 					NetLogic.addCookie(response, new Cookie("token", UserLogic.generateUserToken(email)), true);
 					NetLogic.addCookie(response, new Cookie("uid", uid + ""), true);
+//					if (fromWeb) request.getRequestDispatcher("/personal.jsp").forward(request, response);
 					retObj.put("success", "yes");
 				}
 				else {
+//					if (fromWeb) request.getRequestDispatcher("/login.html").forward(request, response);
 					logger.debug("sign in failed");
 					retObj.put("success", "no");
 				}

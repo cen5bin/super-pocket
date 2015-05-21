@@ -7,8 +7,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="css/style.css">
+<script src="js/jquery.js"></script>
 <!-- <title>Insert title here</title> -->
 <%
+	
 	int pid = Integer.parseInt(request.getParameter("pid"));
 	JSONObject json = ContentLogic.getPost(pid);
 	%>
@@ -17,10 +19,21 @@
 <body>
 <div id="sp-main-container">
 
+<!-- <div id="sp-content-title"> -->
+<!-- asadda -->
+<!-- </div> -->
+
 <%-- 	<h1> <%=json.get("title") %></h1> --%>
 	<%=json.get("content") %>
 	<% 
 %>
 </div>
+<script type="text/javascript">
+$(document).ready(function(){
+    $(document).click(function(){
+        parent.hide_classes();
+    });
+});
+</script>
 </body>
 </html>

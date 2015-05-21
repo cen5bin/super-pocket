@@ -17,7 +17,14 @@
 </div>
 <div id="sp-class-list-container">
 
-<% HashMap<String, Integer> labels = UserLogic.getTagList(2);
+<% 
+if (request.getParameter("uid") == null) {
+	response.sendRedirect(request.getContextPath()+"/");
+	return;
+}
+int uid = Integer.parseInt(request.getParameter("uid"));
+
+HashMap<String, Integer> labels = UserLogic.getTagList(uid);
 	for (String key : labels.keySet()) {
 %>
     <div class="sp-class-list-item-container">
