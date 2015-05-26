@@ -122,8 +122,21 @@ function add_keyboard_listener() {
 
 //获取文章的div的id
 function get_post_id() {
+
+    console.log(window.location.hostname);
+    console.log(window.location.host);
+    console.log(document.domain);
+
+    var id_map = {
+        'sina.com.cn' : 'artibody',
+        'csdn.net' : 'article_details'
+    };
+
+    return id_map[document.domain];
+
+    return 'artibody';
     //return 'content';
-    return 'topics';
+    //return 'topics';
     //return 'mainContent';
     return 'article_details';
 }
