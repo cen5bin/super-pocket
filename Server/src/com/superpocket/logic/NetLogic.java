@@ -26,6 +26,25 @@ public class NetLogic {
 	}
 	
 	/**
+	 * 写数据
+	 * @param response
+	 * @param text
+	 */
+	public static void writeText(HttpServletResponse response, String text) {
+		try {
+			response.setContentType("text/html; charset=UTF-8");
+			response.setCharacterEncoding("utf-8");
+			PrintWriter out;
+			out = response.getWriter();
+			out.print(text);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
 	 * 向客户端写cookie
 	 * @param response
 	 * @param cookie

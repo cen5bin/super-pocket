@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import com.superpocket.dao.DBConnector;
 import com.superpocket.entity.PostItem;
+import com.superpocket.kit.JiebaKit;
 import com.superpocket.kit.SettingKit;
 import com.superpocket.kit.TimeKit;
 
@@ -67,6 +68,7 @@ public class ContentLogic {
 	 * @return
 	 */
 	public static JSONArray classify(int uid, String title, String content) {
+		
 		ArrayList<String> labels = SettingKit.getClassifier(uid).classify(title, content);
 		JSONArray ret = new JSONArray();
 		for (String label : labels)

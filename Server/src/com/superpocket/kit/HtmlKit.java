@@ -107,8 +107,10 @@ public class HtmlKit {
 	}
 	
 	public static void main(String[] args) {
+		String html = "<head>asd<asd</head>asdada";
 		logger.debug(getHeader("<head>asdasd</head>asdada"));
 		logger.debug(deleteHTMLTag("<head>asdasd</head>asdada"));
+//		logger.debug(deleteLabel(html));
 		logger.debug(compactHtml("asda asdsasd asdd     asdadas"));
 	}
 }

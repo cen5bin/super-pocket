@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import com.superpocket.kit.DataKit;
 import com.superpocket.kit.HtmlKit;
+import com.superpocket.kit.JiebaKit;
 import com.superpocket.logic.NetLogic;
 import com.superpocket.logic.UserLogic;
 
@@ -41,9 +42,10 @@ public class SignIn extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
-		out.print("asd");
-		
-		HtmlKit.getHtmlHeader("http://blog.csdn.net/wangqiuyun/article/details/11483261");
+//		out.print("asd");
+		String s = JiebaKit.divide("HelloWorld一种是种子填充法。种子填充法理论上能够填充任意区域和图形,但是这种算法存在大量的反复入栈和大规模的递归,降低了填充效率。");
+		out.print(s);
+		//		HtmlKit.getHtmlHeader("http://blog.csdn.net/wangqiuyun/article/details/11483261");
 	}
 
 	/**

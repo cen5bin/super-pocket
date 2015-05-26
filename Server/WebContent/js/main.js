@@ -26,6 +26,8 @@ function show_classes() {
     }
     var side_bar_width = parseInt($('#sp-side-bar').css('width'));
     var class_list_width = parseInt($('#sp-class-list').css('width'));
+    var src = $('#sp-class-list').attr('src');
+    $('#sp-class-list').attr('src', src);
     $('#sp-class-list').css('display', 'block')
         .css('left', (side_bar_width - class_list_width) + 'px')
         .css('opacity', '1');
