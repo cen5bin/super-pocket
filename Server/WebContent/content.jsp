@@ -13,7 +13,10 @@
 <!-- <title>Insert title here</title> -->
 <%
 	
-	int pid = Integer.parseInt(request.getParameter("pid"));
+	String s = request.getParameter("pid");
+	s = new String(s.getBytes("ISO8859_1"), "utf-8");
+
+	int pid = Integer.parseInt(s);
 	JSONObject json = ContentLogic.getPost(pid);
 	%>
 <%=json.get("head") %>

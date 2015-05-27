@@ -23,9 +23,11 @@ public class WordKit {
 			BufferedReader in = new BufferedReader(new FileReader(FileConf.VOCABULARY_PATH));
 			String line = null;
 			while ((line = in.readLine()) != null) {
+//				logger.debug(line);
 				String[] ss = line.split(" ");
-				if (ss.length != 2) vocabulary.put(" ", Integer.parseInt(ss[0]));
-				else vocabulary.put(ss[1], Integer.parseInt(ss[0]));
+				if (ss[1].length() == 0) continue;
+				if (ss.length != 2) vocabulary.put(" ", Integer.parseInt(ss[1]));
+				else vocabulary.put(ss[0], Integer.parseInt(ss[1]));
 			}
 			in.close();
 			

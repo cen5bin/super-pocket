@@ -40,7 +40,9 @@ public class SignUp extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
-		out.print("zz");
+		String s = request.getParameter("tag");
+		s = new String(s.getBytes("ISO8859_1"), "utf-8");
+		out.print(s);
 	}
 
 	/**

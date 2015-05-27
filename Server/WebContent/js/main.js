@@ -47,7 +47,9 @@ function show_all_post(){
 
 function show_posts_in(tag) {
 	hide_classes();
-	$('#sp-admin-content').attr('src', encodeURI('postlist.jsp?tag='+tag+'&uid=' + $('#sp-admin-uid').val()));
+//	console.log(encodeURIComponent('postlist.jsp?tag='+tag+'&uid=' + $('#sp-admin-uid').val()));
+//	console.log(encodeURI('postlist.jsp?tag='+encodeURIComponent(tag)+'&uid=' + $('#sp-admin-uid').val()));
+	$('#sp-admin-content').attr('src', 'postlist.jsp?tag='+encodeURIComponent(tag)+'&uid=' + $('#sp-admin-uid').val());
 }
 
 function show_post_content(pid) {

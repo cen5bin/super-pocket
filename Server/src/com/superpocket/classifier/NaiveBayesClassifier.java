@@ -6,11 +6,18 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;  
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Vector;
 
 import jnr.ffi.Struct.int16_t;
 
@@ -18,12 +25,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.superpocket.conf.FileConf;
+import com.superpocket.kit.ClassKit;
 import com.superpocket.kit.PostKit;
 
 
 
 public class NaiveBayesClassifier implements ClassifierInterface{
 	private static final long WORD_ID_OFFSET = 1000;
+	
+	private static double[] categoriesPro = null;
+	private static double[][] wordsPro = null;
+	private static int categoriesNum = 0;
+	private static int wordsNum = 0;
 	
 	private static final Map<Integer, Double> proCategory = new HashMap<Integer, Double>();
 	private static final Map<Long, Double> proWordsInCategory = new HashMap<Long, Double>();
@@ -66,6 +79,8 @@ public class NaiveBayesClassifier implements ClassifierInterface{
 			
 			try {
 				BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(trainFile)));
+				br.readLine();
+				br.readLine();
 				String line;
 				for (line = br.readLine(); line != null; line = br.readLine()) {
 					if (line.trim() == "") {
@@ -143,24 +158,18 @@ public class NaiveBayesClassifier implements ClassifierInterface{
 					fw.write(categoryId + " " + categoryPro + "\n");
 				}
 				
-				fw.write(wordNumPerWordPerCategory.size() + "\n");
+				fw.write(words.size() + "\n");
 				for (Object key : wordNumPerWordPerCategory.keySet()) {
 					long wordPerCategoryId = (Long)key;
 					int categoryId = (int)(wordPerCategoryId % WORD_ID_OFFSET);
 					double wordPerCategoryPro = ((Integer)wordNumPerWordPerCategory.get(key) * 1.0) / ((Integer)wordNumPerCategory.get(categoryId));
-					fw.write(wordPerCategoryId + " " + wordPerCategoryPro + "\n");
+					fw.write(wordPerCategoryId / WORD_ID_OFFSET + " " + categoryId + " " + wordPerCategoryPro + "\n");
 				}
 				
 				fw.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("write model file meet error!");
-				ret = -1;
-				break;
-			}
-			
-			if (-1 == NaiveBayesClassifier.loadModel(modelFile)) {
-				logger.error("load model meet error!");
 				ret = -1;
 				break;
 			}
@@ -173,31 +182,35 @@ public class NaiveBayesClassifier implements ClassifierInterface{
 		int ret = 0;
 		
 		do {
-			NaiveBayesClassifier.proCategory.clear();
-			NaiveBayesClassifier.proWordsInCategory.clear();
-			
 			try {
 				BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(modelFile)));
 				
 				String line = br.readLine();
-				int categoryNum = Integer.parseInt(line);
-				for (int index = 0; index < categoryNum; ++index) {
+				NaiveBayesClassifier.categoriesNum = Integer.parseInt(line);
+				NaiveBayesClassifier.categoriesPro = new double[NaiveBayesClassifier.categoriesNum];
+				for (int index = 0; index < NaiveBayesClassifier.categoriesNum; ++index) {
 					line = br.readLine();
 					String[] subLine = line.split(" ");
 					int categoryId = Integer.parseInt(subLine[0]);
 					double categoryPro = Double.parseDouble(subLine[1]);
-					NaiveBayesClassifier.proCategory.put(categoryId, categoryPro);
-					
+					NaiveBayesClassifier.categoriesPro[categoryId] = categoryPro;
 				}
 				
 				line = br.readLine();
-				int wordCategoryNum = Integer.parseInt(line);
-				for (int index = 0; index < wordCategoryNum; ++index) {
+				NaiveBayesClassifier.wordsNum = Integer.parseInt(line);
+				logger.debug(NaiveBayesClassifier.wordsNum);
+				logger.debug(NaiveBayesClassifier.categoriesNum);
+				NaiveBayesClassifier.wordsPro = new double[NaiveBayesClassifier.wordsNum][NaiveBayesClassifier.categoriesNum];
+				for (int index = 0; index < NaiveBayesClassifier.categoriesNum * NaiveBayesClassifier.wordsNum; ++index) {
 					line = br.readLine();
 					String[] subLine = line.split(" ");
-					long wordCategoryId = Long.parseLong(subLine[0]);
-					double wordCategoryPro = Double.parseDouble(subLine[1]);
-					NaiveBayesClassifier.proWordsInCategory.put(wordCategoryId, wordCategoryPro);
+					int wordId = Integer.parseInt(subLine[0]);
+					int categoryId = Integer.parseInt(subLine[1]);
+					double wordPro = Double.parseDouble(subLine[2]);
+					NaiveBayesClassifier.wordsPro[wordId][categoryId] = wordPro;
+					//Log.Log("INFO", wordId + " " + categoryId + " " + wordPro);
+				
+					if (index % 10000 == 0) logger.debug(index / 10000);
 				}
 				
 				br.close();
@@ -207,43 +220,125 @@ public class NaiveBayesClassifier implements ClassifierInterface{
 				ret = -1;
 				break;
 			}
-			
 		} while (false);
 		
 		return ret;
 	}
 	
-	public static int classify(ArrayList<Integer> document) {
-		int ret = 0;
+	private static Map<Integer, Double> calculatePro(ArrayList<Integer> document) {
+		Map<Integer, Double> pro = new HashMap<Integer, Double>();
 		
 		do {
-			double pro = Double.MAX_VALUE * -1.0;
-			ret = -1;
-			
-			for (Integer categoryId : NaiveBayesClassifier.proCategory.keySet()) {
+			/* calculate probability */
+			for (int categoryId = 0; categoryId < NaiveBayesClassifier.categoriesNum; ++categoryId) {
 				double tmp = 0;
-				tmp += Math.log(NaiveBayesClassifier.proCategory.get(categoryId));
+				tmp += Math.log(NaiveBayesClassifier.categoriesPro[categoryId]);
 				for (int index = 0; index < document.size(); ++index) {
-					long wordCategoryId = document.get(index) * WORD_ID_OFFSET + categoryId;
-					if (proWordsInCategory.containsKey(wordCategoryId)) {
-						tmp += Math.log(NaiveBayesClassifier.proWordsInCategory.get(document.get(index) * WORD_ID_OFFSET + categoryId));
+					if (document.get(index) < NaiveBayesClassifier.wordsNum) {
+						tmp += Math.log(NaiveBayesClassifier.wordsPro[document.get(index)][categoryId]);
 					}
 				}
-				logger.debug("category id = " + categoryId + ", pro = " + tmp);
-				if (tmp > pro) {
-					pro = tmp;
-					ret = categoryId;
-				}
+				pro.put(categoryId, tmp);
+			}
+			logger.debug("the size of proMap before sort = " + pro.size());
+			
+			/* sort */
+			pro = sortPro(pro);
+			if (null == pro) {
+				logger.debug("sort pro meet error!");
+				break;
+			}
+			logger.debug("the size of proMap after sort = " + pro.size());
+		} while(false);
+		
+		return pro;
+	}
+	
+	public static Integer[] classify(ArrayList<Integer> document, int topK) {
+		Vector<Integer> ret = new Vector<Integer>();
+		
+		do {
+			Map<Integer, Double> pro = calculatePro(document);
+			if (pro == null) {
+				logger.error("calculate pro meet error!");
+				ret = null;
+				break;
 			}
 			
+			int index = 0;
+			for (Map.Entry<Integer, Double> entry : pro.entrySet()) {
+				if (index++ == topK) {
+					break;
+				}
+				ret.add(entry.getKey());
+			}
+		} while (false);
+		
+		return (Integer[])ret.toArray(new Integer[ret.size()]);
+	}
+	
+	public static ArrayList<Integer> classify(ArrayList<Integer> document, int topK, double threshold) {
+		ArrayList<Integer> ret = new ArrayList<Integer>();
+		
+		do {
+			Map<Integer, Double> pro = calculatePro(document);
+			if (pro == null) {
+				logger.error("calculate pro meet error!");
+				ret = null;
+				break;
+			}
+			
+			int index = 0;
+			double proMax = 0;
+			for (Map.Entry<Integer, Double> entry : pro.entrySet()) {
+				if (index++ == topK) {
+					break;
+				}
+				
+				if (1 == index) {
+					proMax = entry.getValue();
+				}
+				logger.debug("diff rate = " + Math.abs((proMax - entry.getValue()) / proMax));
+				if (threshold >= Math.abs((proMax - entry.getValue()) / proMax)) {
+					ret.add(entry.getKey());
+				}
+			}
 		} while (false);
 		
 		return ret;
+	}
+	
+	private static Map<Integer, Double> sortPro(Map<Integer, Double> pro) {
+		Map<Integer, Double> sortedPro = new LinkedHashMap<Integer, Double>();
+		
+		do {
+			if (pro == null | pro.isEmpty()) {
+				return null;
+			}
+			
+			List<Map.Entry<Integer, Double>> entryList = new ArrayList<Map.Entry<Integer, Double>>(pro.entrySet());
+			logger.debug("the size of entryList = " + entryList.size());
+			Collections.sort(entryList, new Comparator<Map.Entry<Integer, Double>>() {
+				public int compare(Entry<Integer, Double> a, Entry<Integer, Double> b) {
+					return b.getValue().compareTo(a.getValue());
+				}
+			});
+			
+			Iterator<Map.Entry<Integer, Double>> iter = entryList.iterator();
+			Map.Entry<Integer, Double> entry = null;
+			while (iter.hasNext()) {
+				entry = iter.next();
+				sortedPro.put(entry.getKey(), entry.getValue());
+			}
+		} while (false);
+		
+		return sortedPro;
 	}
 	
 	public static void main(String[] args) {
 //		logger.debug("asd".substring(0, 300));
 		ClassifierInterface classifier = new NaiveBayesClassifier();
+		logger.debug("main");
 		Scanner in = new Scanner(System.in);
 		StringBuilder sb = new StringBuilder();
 		while (in.hasNext()) {
@@ -288,10 +383,14 @@ public class NaiveBayesClassifier implements ClassifierInterface{
 		
 		ArrayList<Integer> termIdList = PostKit.getTermIdList(title, content);
 //		int[] document;
-		int ret = NaiveBayesClassifier.classify(termIdList);
+		ArrayList<Integer> ret = NaiveBayesClassifier.classify(termIdList, 3, 0.1);
 		logger.debug(ret);
 		ArrayList<String> res = new ArrayList<String>();
-		res.add("label");
+		
+		for (Integer id : ret)
+			res.add(ClassKit.getClass(id));
+		
+//		res.add("label");
 		return res;
 	}
 	
