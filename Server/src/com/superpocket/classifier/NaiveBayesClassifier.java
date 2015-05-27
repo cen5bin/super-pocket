@@ -17,6 +17,7 @@ import jnr.ffi.Struct.int16_t;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.superpocket.conf.FileConf;
 import com.superpocket.kit.PostKit;
 
 
@@ -241,7 +242,7 @@ public class NaiveBayesClassifier implements ClassifierInterface{
 	}
 	
 	public static void main(String[] args) {
-		
+//		logger.debug("asd".substring(0, 300));
 		ClassifierInterface classifier = new NaiveBayesClassifier();
 		Scanner in = new Scanner(System.in);
 		StringBuilder sb = new StringBuilder();
@@ -272,7 +273,7 @@ public class NaiveBayesClassifier implements ClassifierInterface{
 	private static final Logger logger = LogManager.getLogger();
 	
 	static {
-		if (-1 == NaiveBayesClassifier.loadModel("data/bayes/model.data")) {
+		if (-1 == NaiveBayesClassifier.loadModel(FileConf.BAYES_MODE_PATH)) {
 			logger.error("Naive Bayes Classifier train failed!");
 		} else {
 			logger.debug("Naive Bayes Classifier train finished.");
@@ -289,7 +290,9 @@ public class NaiveBayesClassifier implements ClassifierInterface{
 //		int[] document;
 		int ret = NaiveBayesClassifier.classify(termIdList);
 		logger.debug(ret);
-		return null;
+		ArrayList<String> res = new ArrayList<String>();
+		res.add("label");
+		return res;
 	}
 	
 	

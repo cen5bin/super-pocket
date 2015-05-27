@@ -20,7 +20,7 @@ public class DataKit {
 			while ((s = reader.readLine()) != null) {
 				sb = sb.append(s);
 			}
-			logger.debug(sb);
+//			logger.debug(sb);
 			return sb.toString();//new String(sb.toString().getBytes("ISO8859_1"), "utf-8");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -68,12 +68,12 @@ public class HtmlKit {
 	/**
 	 * 获取html纯文本
 	 * @param s html原始文本
-	 * @param len 限制长度
+	 * @param len 限制长度 
 	 * @return
 	 */
 	public static String getPlainHtml(String s, int len) {
 		String ret = compactHtml(deleteHTMLTag(s));
-		if (ret.length() > len) return ret.substring(0, len);
+		if (ret.length() > len && len != 0) return ret.substring(0, len);
 		return ret;
 	}
 	

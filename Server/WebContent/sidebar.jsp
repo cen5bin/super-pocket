@@ -46,10 +46,16 @@
     <img src="img/man.png">
     
     <%=UserLogic.getEmail(uid) %> &nbsp;
-    <a href="#" style="text-decoration:underline; color:rgb(0,190,107); font-size:12px;">注销</a></div>
+    <a href="#" onclick="sign_out()" style="text-decoration:underline; color:rgb(0,190,107); font-size:12px;">注销</a></div>
 </div>
 
 <script>
+
+function sign_out() {
+	console.log('zzz');
+	parent.sign_out();
+}
+
     $(document).ready(function(){
         $('.sp-side-bar-item').each(function(){
 

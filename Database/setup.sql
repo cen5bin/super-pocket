@@ -18,7 +18,8 @@ create table if not exists post (
     head longtext not null,
     uid int not null,
     plain longtext not null,
-    time datetime not null default '2015-05-01'
+    time datetime not null default '2015-05-01',
+    vector text not null
 );
 
 /*post tag对应表*/

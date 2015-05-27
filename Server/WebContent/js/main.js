@@ -54,3 +54,9 @@ function show_post_content(pid) {
 	hide_classes();
 	$('#sp-admin-content').attr('src', encodeURI('content.jsp?pid='+pid));
 }
+
+
+function sign_out() {
+	console.log('Sign Out');
+	window.location.href = 'SignOut';
+}

@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import com.superpocket.dao.DBConnector;
 import com.superpocket.entity.PostItem;
+import com.superpocket.kit.PostKit;
 import com.superpocket.kit.SettingKit;
 import com.superpocket.kit.TimeKit;
 
@@ -55,8 +56,8 @@ public class ContentLogic {
 	 * @return
 	 */
 	public static int tempSave(int uid, String title, String content, String head, String plain) {
-		String sql = "insert into post(uid, title, content, head, plain) values(?, ?, ?, ?, ?)";
-		return DBConnector.update(sql, uid, title, content, head, plain);
+		String sql = "insert into post(uid, title, content, head, plain, vector) values(?, ?, ?, ?, ?, ?)";
+		return DBConnector.update(sql, uid, title, content, head, plain, PostKit.calculateVector(title, plain));
 	}
 	
 	/**

@@ -26,7 +26,10 @@
     <!--<iframe id="sp-post-list" class="sp-admin-iframe"></iframe>-->
     <iframe id="sp-admin-content" class="sp-admin-iframe" src="postlist.jsp?uid=<%=uid %>"></iframe>
 </div>
-`
+
+<!--     <form method="post" id="sp-signout-form" action="SignOut"></form> -->
+
+
 <script>
     $(document).ready(function(){
         $('#sp-admin-content').click(function(){
