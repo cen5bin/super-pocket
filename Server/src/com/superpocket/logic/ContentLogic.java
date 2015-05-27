@@ -12,7 +12,6 @@ import org.json.JSONObject;
 
 import com.superpocket.dao.DBConnector;
 import com.superpocket.entity.PostItem;
-import com.superpocket.kit.JiebaKit;
 import com.superpocket.kit.SettingKit;
 import com.superpocket.kit.TimeKit;
 
