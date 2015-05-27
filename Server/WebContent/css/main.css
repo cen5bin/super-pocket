@@ -409,3 +409,44 @@ a {
 
 }
 
+#sp-main-tag-bar {
+	height: 50px;
+/* 	background-color:red; */
+	width:80%;
+	margin: auto;
+}
+
+.sp-tag-div {
+/* 	display: inline; */
+	float: left;
+	font-size : 16px;
+	border-radius: 4px;
+	color: white;
+	height: 30px;
+	line-height: 30px;
+	padding-left: 10px;
+	padding-right: 10px;
+	min-width:40px;
+	text-align: center;
+	margin-top:10px;
+	margin-left:5px;
+}
+
+.sp-tag-div-0 {
+	background-color: rgb(46, 123, 179);
+}
+
+.sp-tag-div-1 {
+	background-color: rgb(81, 184, 103);
+}
+
+.sp-tag-div-2 {
+	background-color: rgb(81, 193, 219);	
+}
+
+.sp-tag-div-3 {
+	background-color: rgb(243, 172, 93);
+}
+.sp-tag-div-4 {
+	background-color: rgb(222, 81, 82);
+}

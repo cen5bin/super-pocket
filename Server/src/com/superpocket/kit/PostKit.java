@@ -6,6 +6,9 @@ import java.util.HashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.superpocket.entity.PostVector;
+import com.superpocket.logic.ContentLogic;
+
 public class PostKit {
 	private static final Logger logger = LogManager.getLogger();
 	
@@ -55,6 +58,21 @@ public class PostKit {
 			sb.append(key + "," + (vec.get(key) / len));
 		}
 		return sb.toString();
+	}
+	
+	private static HashMap<Integer, ArrayList<PostVector>> postVectorMap = new HashMap<Integer, ArrayList<PostVector>>();
+
+	/**
+	 * 获取uid的所有文档向量
+	 * @param uid
+	 * @return
+	 */
+	public static ArrayList<PostVector> getPostVectors(int uid) {
+		ArrayList<PostVector> ret = postVectorMap.get(uid);
+		if (ret != null) return ret;
+		ret = ContentLogic.getPostVectors(uid);
+		postVectorMap.put(uid, ret);
+		return ret;
 	}
 	
 	

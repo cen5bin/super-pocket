@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import com.superpocket.kit.DataKit;
 import com.superpocket.kit.HtmlKit;
 import com.superpocket.kit.JiebaKit;
+import com.superpocket.logic.ContentLogic;
 import com.superpocket.logic.NetLogic;
 import com.superpocket.logic.UserLogic;
 
@@ -85,6 +86,7 @@ public class SignIn extends HttpServlet {
 					NetLogic.addCookie(response, new Cookie("email", email), false);
 					NetLogic.addCookie(response, new Cookie("token", UserLogic.generateUserToken(email)), true);
 					NetLogic.addCookie(response, new Cookie("uid", uid + ""), true);
+					ContentLogic.getPostVectors(uid);
 //					if (fromWeb) request.getRequestDispatcher("/personal.jsp").forward(request, response);
 					retObj.put("success", "yes");
 				}

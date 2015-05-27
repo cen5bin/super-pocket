@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import com.superpocket.dao.DBConnector;
 import com.superpocket.entity.PostItem;
+import com.superpocket.entity.PostVector;
 import com.superpocket.kit.PostKit;
 import com.superpocket.kit.SettingKit;
 import com.superpocket.kit.TimeKit;
@@ -43,6 +44,12 @@ public class ContentLogic {
 			ret = DBConnector.update(tmp, uid, pid, s);
 			if (ret == -1) return false;
 		}
+		
+		ArrayList<PostVector> postVectors = getPostVectors(uid);
+		PostVector vector = getPostVector(pid);
+		if (vector != null)
+		postVectors.add(vector);
+		
 		return ret != -1;
 	}
 	
@@ -145,6 +152,71 @@ public class ContentLogic {
 		}
 		return ret;
 	}
+	
+	/**
+	 * 获取某用户的所有文档向量
+	 * @param uid
+	 * @return
+	 */
+	public static ArrayList<PostVector> getPostVectors(int uid) {
+		String sql = "select vector, tags from post where uid = ?";
+		ArrayList<PostVector> ret = new ArrayList<PostVector>();
+		ResultSet rs = DBConnector.query(sql, uid);
+		try {
+			while (rs.next()) {
+				String string = rs.getString(1);
+				String[] items = string.split("#");
+				ArrayList<Integer> termIdList = new ArrayList<Integer>();
+				ArrayList<Double> tfidf = new ArrayList<Double>();
+				for (String item : items) {
+					termIdList.add(Integer.parseInt(item.split(",")[0]));
+					tfidf.add(Double.parseDouble(item.split(",")[1]));
+				}
+				ArrayList<String> tags = new ArrayList<String>();
+				string = rs.getString(2);
+				items = string.split(",");
+				for (String item : items) tags.add(item);
+				ret.add(new PostVector(termIdList, tfidf, tags));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
+	/**
+	 * 获取pid的文档向量
+	 * @param pid
+	 * @return
+	 */
+	public static PostVector getPostVector(int pid) {
+		String sql = "select vector, tags from post where pid = ? limit 1";
+		ResultSet rs = DBConnector.query(sql, pid);
+		PostVector ret = null;
+		try {
+			if (rs.next()) {
+				String string = rs.getString(1);
+				String[] items = string.split("#");
+				ArrayList<Integer> termIdList = new ArrayList<Integer>();
+				ArrayList<Double> tfidf = new ArrayList<Double>();
+				for (String item : items) {
+					termIdList.add(Integer.parseInt(item.split(",")[0]));
+					tfidf.add(Double.parseDouble(item.split(",")[1]));
+				}
+				ArrayList<String> tags = new ArrayList<String>();
+				string = rs.getString(2);
+				items = string.split(",");
+				for (String item : items) tags.add(item);
+				ret = new PostVector(termIdList, tfidf, tags);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
 	
 	public static void main(String[] args) {
 		ArrayList<PostItem> ret = getAllPost(2);
