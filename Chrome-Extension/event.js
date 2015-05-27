@@ -30,6 +30,17 @@ var server_host = '10.211.55.8';
 var cookie_url = 'https://'+server_host+':8443/Server/Secure/';
 var cookie_url1 = 'http://'+server_host+':8080/Server/';
 
+
+//注销功能
+function sign_out() {
+    console.log('sign out');
+    chrome.cookies.remove({url:cookie_url, name:'email'});
+    chrome.cookies.remove({url:cookie_url, name:'token'});
+    chrome.cookies.remove({url:cookie_url1, name:'email'});
+    chrome.cookies.remove({url:cookie_url1, name:'token'});
+}
+
+
 /**
  * 向服务端发送待分类的网页正文
  * @param data
@@ -93,6 +104,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
     if (request.method == 'save_to_server')
         //console.log(request);
         save_to_server(request.data);
+    else if (request.method == 'logout')
+        sign_out();
     //sendResponse('zzz');
 
 });

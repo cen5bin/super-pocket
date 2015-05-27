@@ -192,4 +192,8 @@ window.addEventListener('message', function(event){
 
         });
     }
+    else if (event.data.name == 'logout') {
+        recover_page();
+        chrome.runtime.sendMessage({method: 'logout', data:{}}, function(response){});
+    }
 });

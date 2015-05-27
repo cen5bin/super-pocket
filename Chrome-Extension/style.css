@@ -207,6 +207,14 @@ p.separate-line:before, p.separate-line::after{
     height: 12px;
 }
 
+#super-pocket-panel-logout-button {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 12px;
+    height: 12px;
+}
+
 /*#super-pocket-panel-container p {*/
     /*color: rgba(255,255,255,0.5);*/
     /*font-weight: 100;*/

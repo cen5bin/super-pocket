@@ -43,6 +43,10 @@ $(document).ready(function(){
         parent.postMessage({name:'close-panel'}, '*');
     });
 
+    $('#super-pocket-panel-logout-button').click(function(){
+        parent.postMessage({name:'logout'}, '*');
+    });
+
     $('#super-pocket-panel-save-button').click(function(){
         //getLabels();
         parent.postMessage({name:'save-result', data:getLabels()}, '*');

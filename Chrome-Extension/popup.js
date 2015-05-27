@@ -99,7 +99,7 @@ function sign_in() {
         background.send_request_post('Secure/SignIn', get_user_data(), function(data){
             if (data.success == 'yes') {
                 set_cookie(function(){
-                    //window.close();
+                    window.close();
                     background.clip_content();
                 });
             }
@@ -126,12 +126,7 @@ function sign_up() {
 
 
 
-//注销功能
-function sign_out() {
-    console.log('sign out');
-    chrome.cookies.remove({url:cookie_url, name:'email'});
-    chrome.cookies.remove({url:cookie_url, name:'token'});
-}
+
 
 $(document).ready(function(){
     console.log('document ready');
