@@ -1,6 +1,10 @@
 package com.superpocket.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PostVector {
 	private ArrayList<Integer> termIdList = new ArrayList<Integer>();
@@ -33,5 +37,23 @@ public class PostVector {
 	}
 	
 	
+	private static final Logger logger = LogManager.getLogger();
+	public static double calSimilarity(PostVector v1, PostVector v2) {
+		HashMap<Integer, Double> tmp = new HashMap<Integer, Double>();
+		ArrayList<Integer> ids = v1.getTermIdList();
+		ArrayList<Double> tfidf = v1.getTfidf();
+		logger.debug(ids.size());
+		logger.debug(tfidf.size());
+		for (int i = 0; i < ids.size(); ++i) tmp.put(ids.get(i), tfidf.get(i));
+		ids = v2.getTermIdList();
+		tfidf = v2.getTfidf();
+		double ret = 0;
+		for (int i = 0; i < ids.size(); ++i) {
+			Double tt = tmp.get(ids.get(i));
+			if (tt == null) continue;
+			ret += tt * tfidf.get(i);
+		}
+		return ret;
+	}
 	
 }

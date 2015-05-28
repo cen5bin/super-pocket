@@ -31,7 +31,9 @@ public class WordKit {
 			}
 			in.close();
 			
-			idf = new double[vocabulary.size()];
+//			logger.debug(vocabulary.size());
+			
+			idf = new double[vocabulary.size() + 10];
 			in = new BufferedReader(new FileReader(FileConf.IDF_PATH));
 			while ((line = in.readLine()) != null) {
 				String[] ss = line.split(" ");

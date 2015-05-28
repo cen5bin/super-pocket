@@ -66,6 +66,32 @@ public class PostKit {
 		return sb.toString();
 	}
 	
+	public static PostVector calculatePostVector(String title, String content) {
+		ArrayList<Integer> termIdList = getTermIdList(title, content);
+		HashMap<Integer, Double> vec = new HashMap<Integer, Double>();
+		for (Integer termId : termIdList) {
+			Double tfidf = vec.get(termId);
+			if (tfidf == null) tfidf = Double.valueOf(0);
+			tfidf += WordKit.getIdf(termId);
+			vec.put(termId, tfidf);
+		}
+		
+		double len = 0;
+		for (Integer key : vec.keySet()) {
+			len += vec.get(key) * vec.get(key);
+		}
+		len = Math.sqrt(len);
+		ArrayList<Integer> ids = new ArrayList<Integer>();
+		ArrayList<Double> tfidfs = new ArrayList<Double>();
+		
+		for (Integer key : vec.keySet()) {
+			ids.add(key);
+			tfidfs.add(vec.get(key));
+		}
+		return new PostVector(ids, tfidfs, null);
+	}
+	
+	
 	private static HashMap<Integer, ArrayList<PostVector>> postVectorMap = new HashMap<Integer, ArrayList<PostVector>>();
 
 	/**

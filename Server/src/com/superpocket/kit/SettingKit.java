@@ -6,15 +6,29 @@ import cn.ac.ict.textclass.usage.SoftmaxLDAClassifier;
 
 import com.superpocket.classifier.ClassifierInterface;
 import com.superpocket.classifier.ClassifierSample;
+import com.superpocket.classifier.CustomClassifier;
 import com.superpocket.classifier.NaiveBayesClassifier;
 import com.superpocket.logic.UserLogic;
 
 public class SettingKit {
 	private static ClassifierInterface[] classifiers = {new NaiveBayesClassifier(),
-		new RocchioLDAClassifier(new CosineSimilarity()), new SoftmaxLDAClassifier()};
+		new RocchioLDAClassifier(new CosineSimilarity()), new SoftmaxLDAClassifier(),
+		new CustomClassifier()};
+	
+	/**
+	 * 获取个性化分类器
+	 * @return
+	 */
+	public static ClassifierInterface getCustomClassfier() {
+		return classifiers[3];
+	}
 	
 	
-	
+	/**
+	 * 获取用户设置的分类器
+	 * @param uid 
+	 * @return
+	 */
 	public static ClassifierInterface getClassifier(int uid) {
 //		return new ClassifierSample();
 //		return new NaiveBayesClassifier();

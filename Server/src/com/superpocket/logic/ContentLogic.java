@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.superpocket.classifier.CustomClassifier;
 import com.superpocket.dao.DBConnector;
 import com.superpocket.entity.PostItem;
 import com.superpocket.entity.PostVector;
@@ -45,7 +46,7 @@ public class ContentLogic {
 			if (ret == -1) return false;
 		}
 		
-		ArrayList<PostVector> postVectors = getPostVectors(uid);
+		ArrayList<PostVector> postVectors = PostKit.getPostVectors(uid);
 		PostVector vector = getPostVector(pid);
 		if (vector != null)
 		postVectors.add(vector);
@@ -76,7 +77,13 @@ public class ContentLogic {
 	 */
 	public static JSONArray classify(int uid, String title, String content) {
 		
-		ArrayList<String> labels = SettingKit.getClassifier(uid).classify(title, content);
+		ArrayList<String> labels1 = SettingKit.getClassifier(uid).classify(title, content);
+//		CustomClassifier classifier = (CustomClassifier) SettingKit.getCustomClassfier();
+		ArrayList<String> labels2 = CustomClassifier.classify(uid, title, content);
+		ArrayList<String> labels = new ArrayList<String>();
+		for (String s : labels1) if (!labels.contains(s)) labels.add(s);
+		for (String s : labels2) if (!labels.contains(s)) labels.add(s);
+		
 		JSONArray ret = new JSONArray();
 		for (String label : labels)
 		ret.put(label);
@@ -159,7 +166,7 @@ public class ContentLogic {
 	 * @return
 	 */
 	public static ArrayList<PostVector> getPostVectors(int uid) {
-		String sql = "select vector, tags from post where uid = ?";
+		String sql = "select vector, tags from post where uid = ? and flag = 1";
 		ArrayList<PostVector> ret = new ArrayList<PostVector>();
 		ResultSet rs = DBConnector.query(sql, uid);
 		try {
