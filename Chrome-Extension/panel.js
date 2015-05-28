@@ -47,6 +47,10 @@ $(document).ready(function(){
         parent.postMessage({name:'logout'}, '*');
     });
 
+    $('#super-pocket-panel-setting-button').click(function(){
+        parent.postMessage({name:'setting'}, '*');
+    });
+
     $('#super-pocket-panel-save-button').click(function(){
         //getLabels();
         parent.postMessage({name:'save-result', data:getLabels()}, '*');

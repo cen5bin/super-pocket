@@ -26,6 +26,7 @@
 
     //只有加上了下面这段，才可以用iframe来引用插件中的html
     "web_accessible_resources": [
-        "panel.html"
+        "panel.html",
+        "setting.html"
     ]
 }

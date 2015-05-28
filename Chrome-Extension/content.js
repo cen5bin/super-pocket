@@ -102,6 +102,7 @@ var is_clipping = false; //当前页面是否处于剪藏状态
 function recover_page() {
     $('#super-pocket-bg').remove();
     $('#super-pocket-panel').remove();
+    $('#sp-setting-frame').remove();
     document.onkeydown = key_down;
     is_clipping = false;
     stop_spin();
@@ -178,6 +179,16 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
+
+function show_setting() {
+    var url = chrome.extension.getURL('setting.html');
+    $('html').append('<iframe src='+ url +' id="sp-setting-frame" scrolling="no"></iframe>');
+}
+
+function hide_setting() {
+    $('#sp-setting-frame').remove();
+}
+
 window.addEventListener('message', function(event){
 
     //这个事件由点击super-pocket-panel的关闭按钮触发
@@ -196,4 +207,14 @@ window.addEventListener('message', function(event){
         recover_page();
         chrome.runtime.sendMessage({method: 'logout', data:{}}, function(response){});
     }
+    else if (event.data.name == 'setting') {
+        show_setting();
+        console.log('zzz');
+    }
+    else if (event.data.name == 'choose-method') {
+        hide_setting();
+        chrome.runtime.sendMessage({method: 'choose-method', data:{method_id: event.data.method_id}}, function(response){});
+    }
+
+
 });

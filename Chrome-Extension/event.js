@@ -106,6 +106,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
         save_to_server(request.data);
     else if (request.method == 'logout')
         sign_out();
+    else if (request.method == 'choose-method') {
+        console.log(request.data.method_id);
+        send_request_post('ChooseMethod', {'method_id': request.data.method_id}, function (response) {
+            console.log(response);
+        }, false);
+    }
+
     //sendResponse('zzz');
 
 });
