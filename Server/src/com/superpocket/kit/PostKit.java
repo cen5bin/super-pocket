@@ -12,6 +12,12 @@ import com.superpocket.logic.ContentLogic;
 public class PostKit {
 	private static final Logger logger = LogManager.getLogger();
 	
+	
+	public static ArrayList<String> getWords(String title, String content) {
+		ArrayList<String> terms = JiebaKit.divide1(content);
+		return terms;
+	}
+	
 	/**
 	 * 获取文章的词项ID数组
 	 * @param title 标题
@@ -20,7 +26,7 @@ public class PostKit {
 	 */
 	public static ArrayList<Integer> getTermIdList(String title, String content) {
 		ArrayList<Integer> ret = new ArrayList<Integer>();
-		ArrayList<String> terms = JiebaKit.divide1(content);
+		ArrayList<String> terms = getWords(title, content);//JiebaKit.divide1(content);
 		for (String term : terms) {
 			int id = WordKit.getTermId(term);
 			if (id == -1) continue;

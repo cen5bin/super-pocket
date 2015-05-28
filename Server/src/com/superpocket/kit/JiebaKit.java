@@ -63,7 +63,7 @@ public class JiebaKit {
 	 * @return
 	 */
 	public static ArrayList<String> divide1(String content) {
-		String[] words = divide(content).split("||");
+		String[] words = divide(content).split("\\|\\|");
 		ArrayList<String> ret = new ArrayList<String>();
 		for (String word : words) ret.add(word);
 		return ret;

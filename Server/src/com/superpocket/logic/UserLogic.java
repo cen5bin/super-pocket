@@ -147,6 +147,32 @@ public class UserLogic {
 		return ret;
 	}
 	
+	/**
+	 * 设置方法
+	 * @param uid
+	 * @param method_id
+	 * @return
+	 */
+	public static boolean setMethod(int uid, int method_id) {
+		String sql = "update setting set method_id=? where uid = ? limit 1";
+		int id = DBConnector.update(sql, method_id, uid);
+		if (id == -1) return false;
+		return true;
+	}
+	
+	public static int getMethod(int uid) {
+		String sql = "select method_id from setting where uid = ? limit 1";
+		ResultSet rs = DBConnector.query(sql, uid);
+		try {
+			if (rs.next()) return rs.getInt(1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 1;
+	}
+	
+	
 	public static void main(String[] args) {
 		int uid = UserLogic.SignIn("love@gmail.com", "love77");
 		if (uid > 0) logger.info("登录成功");

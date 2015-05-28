@@ -1,9 +1,5 @@
 package cn.ac.ict.textclass.classifier;
 
-
-
-
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,7 +7,7 @@ import cn.ac.ict.textclass.kernel.Kernel;
 import cn.ac.ict.textclass.kernel.TanhKernel;
 
 public class SVM {
-	private Logger logger =  LogManager.getLogger();
+	private Logger logger = LogManager.getLogger();
 	private double alpha[];
 	private double C;
 	private double tol;

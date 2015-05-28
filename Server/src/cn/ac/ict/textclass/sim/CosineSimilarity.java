@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 
 public class CosineSimilarity implements Similarity{
-	private static Logger logger =  LogManager.getLogger();
+	private static Logger logger = LogManager.getLogger();
 	
 	/**
 	 * calculate the consine similarity of two vector

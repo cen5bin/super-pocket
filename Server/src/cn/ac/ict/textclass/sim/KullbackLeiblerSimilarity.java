@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class KullbackLeiblerSimilarity implements Similarity{
 	private Logger logger = LogManager.getLogger();
+	
 	/**
 	 * @param p is a probability distribution, that means the summation of each element of p is 1.
 	 * @param q is a probability distribution, that means the summation of each element of q is 1.

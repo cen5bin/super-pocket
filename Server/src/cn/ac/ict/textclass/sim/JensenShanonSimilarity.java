@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
  * @version Create time: 2015��5��13�� ����11:50:03
  */
 public class JensenShanonSimilarity implements Similarity{
-
 	private Logger logger = LogManager.getLogger();
 	/**
 	 * @return negtive Jensen-Shanon divergence of p and q

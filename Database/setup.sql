@@ -30,6 +30,10 @@ create table if not exists pt (
     uid int not null
 );
 
+create table if not exists setting (
+    uid int primary key not null,
+    method_id int not null
+);
 /*alter table post add foreign key fk1(uid) references user(uid);
 alter table user add index(email);
 alter table post add index(uid);*/

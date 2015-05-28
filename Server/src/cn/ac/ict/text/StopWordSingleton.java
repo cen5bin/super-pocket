@@ -58,5 +58,15 @@ public class StopWordSingleton {
 		}
 		return nword_list;
 	}
+	
+	public List<String> filterStopWords(String[] word_list){
+		List<String> nword_list = new ArrayList<String>();
+		for( String word: word_list){
+			if( !stopwords.contains(word) ){
+				nword_list.add(word);
+			}
+		}
+		return nword_list;
+	}
 	private Set<String> stopwords = null;
 }

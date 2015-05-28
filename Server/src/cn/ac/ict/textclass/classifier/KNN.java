@@ -8,20 +8,30 @@ import cn.ac.ict.textclass.sim.Similarity;
 
 public class KNN {
 	private Similarity similarity;
+	private int K;
+	private List<double[][]> class_vecs = null;
 	public KNN(Similarity similarity){
 		this.similarity = similarity;
 	}
 	
 	/**
-	 * classify input document
+	 * config KNN
 	 * @param K algorithm parameter K
 	 * @param class_vecs A list where the element type is double[][].
 	 * Each element (double [][] vecs) refers to a specific class 
 	 * and each row of vecs represent a sample.
+	 */
+	public void config(int K,List<double[][]> class_vecs){
+		this.K = K;
+		this.class_vecs = class_vecs;
+	}
+	/**
+	 * classify input document
+	 * 
 	 * @param doc_vec The vector representation of input document.
 	 * @return the class of document ( A integer begin from 0 ).
 	 */
-	public int run(int K,List<double[][]> class_vecs,double[] doc_vec){
+	public int run(double[] doc_vec){
 		List<Integer> type = new ArrayList<Integer>();
 		List<Double> dist_list = new ArrayList<Double>();
 

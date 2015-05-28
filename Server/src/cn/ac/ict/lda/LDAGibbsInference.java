@@ -1,6 +1,8 @@
 package cn.ac.ict.lda;
 
 import java.util.Random;
+
+
 import java.io.*;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +30,9 @@ public class LDAGibbsInference {
 			for(int w = 0; w < V && (line = br.readLine() ) != null; ++ w ){
 				arr = line.split(" ");
 				for( int k = 0; k < K; ++ k ){
+					if( arr[k].equals("NaN") ){
+						System.out.println( arr[k]);
+					}
 					proba[k][w] = Double.parseDouble(arr[k]);
 				}
 			}

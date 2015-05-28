@@ -2,6 +2,7 @@ package cn.ac.ict.textclass.classifier;
 
 import java.util.List;
 
+import cn.ac.ict.textclass.algorithm.TopKSelector;
 import cn.ac.ict.textclass.sim.CosineSimilarity;
 import cn.ac.ict.textclass.sim.Similarity;
 
@@ -10,20 +11,27 @@ import cn.ac.ict.textclass.sim.Similarity;
  *  to the Rocchio algorithm for relevance feedback.
  * @author GuoTianyou
  * @email fortianyou@gmail.com
- * @version Create time: 2015年5月13日 下午7:55:07
  */
 public class Rocchio {
 	private Similarity similarity;
+	private double proto[][] = null;
+	private int K;
 	public Rocchio(Similarity similarity){
 		this.similarity = similarity;
+	}
+	
+	public void setProto(double [][]proto){
+		K = proto.length;
+		this.proto = proto;
 	}
 	/**
 	 * 
 	 * @param refer a list of documents' vectors of different classes
-	 * @param vec the vector of specify document witch need to be classified.
+	 * 
 	 */
-	public int run(List<double [][]> refer,double vec[]){
-		double proto[][] = new double[refer.size()][];
+	public void train(List<double[][]> refer){
+		K = refer.size();
+		proto = new double[K][];
 		int i = 0;
 		/**get prototype**/
 		for( double[][] v: refer){
@@ -45,8 +53,18 @@ public class Rocchio {
 //			System.out.println();
 			i ++;
 		}
-		int K = refer.size();
+		
+	}
+	
+	/**
+	 * @param vec the vector of specify document witch need to be classified.
+	 * @param vec
+	 * @return
+	 */
+	public int classify(double vec[]){
+		
 		int max = K;
+		
 		double score = 0;
 		for( int k = 0; k < K; ++ k ){
 			/**if use KL the reference should be the second parameter**/
@@ -62,5 +80,18 @@ public class Rocchio {
 		
 		return max;
 	}
+	
+	public int[] classify(double vec[],int topK){
+		TopKSelector selector = new TopKSelector(topK);
+		double sim[] = new double[K];
+		for( int k = 0; k < K; ++ k ){
+			/**if use KL the reference should be the second parameter**/
+			sim[k] = similarity.getSimilarity(vec,proto[k]);
+		}
+		
+		int[] topks = selector.getTopK(sim);
+		return topks;
+	}
+	
 }
  
